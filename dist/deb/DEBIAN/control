@@ -1,0 +1,9 @@
+Section: universe/video
+Priority: optional
+Version: 1.0.0
+Homepage: https://github.com/Ahurein/rein_player
+Package: reinplayer
+Maintainer: Ebenezer Ahurein
+Architecture: amd64
+Depends: libgtk-3-0, libmpv2
+Description: Rein Player is a lightweight, fast, and intuitive video player for Linux

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Rein Player
+Comment=Rein Player
+GenericName=Video Player
+Categories=Video
+Version=1.0
+Exec=reinplayer %u
+Terminal=false
+Icon=${SNAP}/meta/gui/reinplayer.png
+MimeType=x-scheme-handler/mixin;

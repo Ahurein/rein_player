@@ -1,0 +1,64 @@
+name: reinplayer
+version: 1.0.0
+summary: Rein Player is a lightweight, fast, and intuitive video player for Linux
+description: Rein Player is a lightweight, fast, and intuitive video player for Linux
+confinement: strict
+base: core24
+grade: devel
+
+slots:
+  dbus-mixin:
+    interface: dbus
+    bus: session
+    name: one.ahurein.reinplayer
+
+apps:
+  reinplayer:
+    command: rein_player
+    extensions: [gnome]
+    environment:
+      LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib/x86_64-linux-gnu/blas:$SNAP/usr/lib/x86_64-linux-gnu/lapack
+    plugs:
+      - audio-playback
+      - audio-record
+      - alsa
+      - pulseaudio
+      - home
+      - removable-media
+    slots:
+      - dbus-mixin
+
+parts:
+  libmpv:
+    source: https://github.com/mpv-player/mpv.git
+    source-type: git
+    source-tag: v0.36.0
+    plugin: meson
+    meson-parameters: [ '-Dbuild-date=false', '-Dlibmpv=true', '-Dcplayer=false', '--prefix=/usr' ]
+    build-packages:
+      - libavcodec-dev
+      - libavfilter-dev
+      - libass-dev
+      - libavformat-dev
+      - libavutil-dev
+      - libswresample-dev
+      - libswscale-dev
+      - libasound2-dev
+      - libjpeg-turbo8-dev
+      - libpulse-dev
+      - libgl-dev
+      - libegl-dev
+      - libglx-dev
+      - pkg-config
+    stage:
+      - "usr/include/mpv/*"
+      - "usr/lib/$SNAPCRAFT_ARCH_TRIPLET/*"
+
+  rein-player:
+    source: ./rein_player
+    plugin: dump
+    after:
+      - libmpv
+    stage-packages: [libblas3, liblapack3, ffmpeg]
+    build-environment:
+      - LD_LIBRARY_PATH: "$LD_LIBRARY_PATH:$SNAPCRAFT_STAGE/usr/lib/$SNAPCRAFT_ARCH_TRIPLET"

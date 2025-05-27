@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Rein Player
+Exec=reinplayer %f
+Icon=reinplayer
+Terminal=false
+Type=Application
+Categories=AudioVideo;Video;
+Comment=A modern video player for Linux
+GenericName=Video Player

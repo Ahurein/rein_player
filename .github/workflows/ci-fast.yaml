@@ -1,0 +1,138 @@
+name: CI Fast
+
+on:
+  workflow_call:
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/Ahurein/flutter-gtk-mpv:latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Check flutter
+        run: flutter doctor
+
+      - name: Install flutter dependencies
+        run: flutter pub get
+
+      - name: Build linux
+        run: flutter build linux --release
+
+      - name: Compress Flutter build
+        run: tar -C build/linux/x64/release/bundle -cvf reinplayer_linux_amd64_portable.tar.gz .
+
+      - name: Upload app archive for next steps
+        uses: actions/upload-artifact@v4
+        with:
+          name: reinplayer_linux_amd64_portable
+          path: reinplayer_linux_amd64_portable.tar.gz
+
+      - name: Create .deb package
+        run: ./dist/build.sh deb
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: reinplayer_linux_amd64.deb.zip
+          path: build/reinplayer_linux_amd64.deb
+
+      - name: Upload linux binary
+        uses: svenstaro/upload-release-action@v2
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: reinplayer_linux_amd64_portable.tar.gz
+          asset_name: reinplayer_linux_amd64_portable.tar.gz
+          tag: ${{ github.ref }}
+          overwrite: true
+
+      - name: Upload debian package
+        uses: svenstaro/upload-release-action@v2
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: build/reinplayer_linux_amd64.deb
+          asset_name: reinplayer_linux_amd64.deb
+          tag: ${{ github.ref }}
+          overwrite: true
+
+  build-linux-appimage:
+    needs: build-linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install linux dependencies
+        run: sudo apt install -y libfuse2
+
+      - name: Download app archive
+        uses: actions/download-artifact@v4.1.7
+        with:
+          name: reinplayer_linux_amd64_portable
+
+      - name: uncompress app archive
+        run: |
+          mkdir -p build/linux/x64/release/bundle
+          tar -C build/linux/x64/release/bundle -xvf reinplayer_linux_amd64_portable.tar.gz
+
+      - name: Create .AppImage package
+        run: ./dist/build.sh appimage
+
+      - name: Upload debian package
+        uses: svenstaro/upload-release-action@v2
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: build/ReinPlayer-x86_64.AppImage
+          asset_name: ReinPlayer-x86_64.AppImage
+          tag: ${{ github.ref }}
+          overwrite: true
+
+  build-linux-snap:
+    needs: build-linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download app archive
+        uses: actions/download-artifact@v4.1.7
+        with:
+          name: reinplayer_linux_amd64_portable
+
+      - name: uncompress app archive
+        run: |
+          mkdir -p build/linux/x64/release/bundle
+          tar -C build/linux/x64/release/bundle -xvf reinplayer_linux_amd64_portable.tar.gz
+
+      - name: Prepare snap build
+        run: ./dist/build.sh snap
+
+      - name: Build .snap
+        uses: snapcore/action-build@v1
+        id: build-snap
+        with:
+          path: dist/snap
+
+      - name: copy snap
+        run: |
+          cp ${{ steps.build-snap.outputs.snap }} reinplayer_linux_amd64.snap
+      - name: Upload snap
+        uses: actions/upload-artifact@v4
+        with:
+          name: reinplayer-snap
+          path: reinplayer_linux_amd64.snap
+
+      - name: Upload linux snap
+        uses: svenstaro/upload-release-action@v2
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ steps.build-snap.outputs.snap }}
+          asset_name: reinplayer_linux_amd64.snap
+          tag: ${{ github.ref }}
+          overwrite: true
