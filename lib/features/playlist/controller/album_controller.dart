@@ -79,6 +79,10 @@ class AlbumController extends GetxController {
         ),
       ...loadedAlbums
     ]);
+
+    if (albumJson.isEmpty) {
+      await dumpAllAlbumsToStorage();
+    }
   }
 
   bool isMediaInDefaultAlbumLocation() {
