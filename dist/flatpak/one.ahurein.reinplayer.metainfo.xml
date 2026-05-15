@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>one.ahurein.reinplayer</id>
+
+  <name>Rein Player</name>
+  <summary>A fast and intuitive video player</summary>
+
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+
+  <description>
+    <p>
+      Rein Player is a fast, lightweight, and intuitive video player with a clean
+      UI inspired by PotPlayer. It is designed for Linux and macOS and supports a
+      wide range of audio and video formats via libmpv.
+    </p>
+    <p>Features:</p>
+    <ul>
+      <li>Plays virtually any container or codec libmpv understands</li>
+      <li>Playlist support with drag-and-drop reordering</li>
+      <li>Customizable keyboard shortcuts</li>
+      <li>Customizable accent colors and themes</li>
+      <li>Picture-in-picture / always-on-top window</li>
+    </ul>
+  </description>
+
+  <launchable type="desktop-id">one.ahurein.reinplayer.desktop</launchable>
+
+  <url type="homepage">https://github.com/Ahurein/rein_player</url>
+  <url type="bugtracker">https://github.com/Ahurein/rein_player/issues</url>
+  <url type="vcs-browser">https://github.com/Ahurein/rein_player</url>
+
+  <developer id="one.ahurein">
+    <name>Ebenezer Ahurein</name>
+  </developer>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>The Rein Player main window</caption>
+      <image type="source">https://raw.githubusercontent.com/Ahurein/rein_player/main/assets/images/reinplayer_view.png</image>
+    </screenshot>
+  </screenshots>
+
+  <categories>
+    <category>AudioVideo</category>
+    <category>Video</category>
+    <category>Player</category>
+  </categories>
+
+  <content_rating type="oars-1.1" />
+
+  <branding>
+    <color type="primary" scheme_preference="light">#f5f5f5</color>
+    <color type="primary" scheme_preference="dark">#1e1e1e</color>
+  </branding>
+
+  <releases>
+    <release version="1.1.0" date="2026-05-15">
+      <description>
+        <p>Release 1.1.0 — bug fixes and new features.</p>
+      </description>
+    </release>
+  </releases>
+</component>

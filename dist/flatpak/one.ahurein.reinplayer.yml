@@ -1,0 +1,66 @@
+app-id: one.ahurein.reinplayer
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+sdk: org.freedesktop.Sdk
+command: reinplayer
+
+finish-args:
+  # Windowing
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11
+  # Hardware accelerated rendering / video decode
+  - --device=dri
+  # Audio
+  - --socket=pulseaudio
+  # Networking (URL launches, online streams, update checks)
+  - --share=network
+  # Files the user opens. Use --filesystem=host if you need full read access.
+  - --filesystem=xdg-videos
+  - --filesystem=xdg-music
+  - --filesystem=xdg-pictures
+  - --filesystem=xdg-download
+  - --filesystem=xdg-documents
+  - --filesystem=host:ro
+  # Removable media (USB sticks, external drives) for video playback
+  - --filesystem=/run/media
+  - --filesystem=/media
+  - --filesystem=/mnt
+  # Prevent the system from sleeping during playback. .ScreenSaver covers
+  # GNOME/KDE/xfce screensaver-inhibit; .PowerManagement is the legacy GNOME
+  # power-manager bus name; .SessionManager is the modern GNOME Inhibit host.
+  # (PowerManagement.Inhibit is a DBus *interface*, not a service — granting
+  # talk-name to it would be a no-op.)
+  - --talk-name=org.freedesktop.ScreenSaver
+  - --talk-name=org.freedesktop.PowerManagement
+  - --talk-name=org.gnome.SessionManager
+  # Own the session DBus name for MPRIS / single-instance handshakes
+  - --own-name=one.ahurein.reinplayer
+  - --own-name=org.mpris.MediaPlayer2.reinplayer
+
+modules:
+  - name: reinplayer
+    buildsystem: simple
+    build-commands:
+      # App binary + Flutter assets land in /app/lib/reinplayer
+      - mkdir -p /app/lib/reinplayer
+      - cp -a bundle/. /app/lib/reinplayer/
+      # Launcher wrapper points $PATH at the real binary
+      - install -Dm755 reinplayer.sh /app/bin/reinplayer
+      # Desktop entry + AppStream metadata
+      - install -Dm644 one.ahurein.reinplayer.desktop
+          /app/share/applications/one.ahurein.reinplayer.desktop
+      - install -Dm644 one.ahurein.reinplayer.metainfo.xml
+          /app/share/metainfo/one.ahurein.reinplayer.metainfo.xml
+      # Icons: install every size we ship under hicolor/SIZExSIZE/apps/.
+      - install -Dm644 icons/64x64/icon.png
+          /app/share/icons/hicolor/64x64/apps/one.ahurein.reinplayer.png
+      - install -Dm644 icons/128x128/icon.png
+          /app/share/icons/hicolor/128x128/apps/one.ahurein.reinplayer.png
+      - install -Dm644 icons/256x256/icon.png
+          /app/share/icons/hicolor/256x256/apps/one.ahurein.reinplayer.png
+      - install -Dm644 icons/512x512/icon.png
+          /app/share/icons/hicolor/512x512/apps/one.ahurein.reinplayer.png
+    sources:
+      - type: dir
+        path: payload

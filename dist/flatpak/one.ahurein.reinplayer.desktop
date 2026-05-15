@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Rein Player
+GenericName=Video Player
+Comment=A fast, lightweight, and intuitive video player
+Exec=reinplayer %U
+Icon=one.ahurein.reinplayer
+Terminal=false
+Categories=AudioVideo;Video;Player;
+StartupWMClass=rein_player
+StartupNotify=true
+MimeType=video/mp4;video/x-matroska;video/webm;video/quicktime;video/x-msvideo;video/x-flv;video/mpeg;video/x-ms-wmv;video/ogg;video/3gpp;video/3gpp2;audio/mpeg;audio/mp4;audio/flac;audio/ogg;audio/x-wav;audio/aac;audio/x-ms-wma;application/x-matroska;application/ogg;
