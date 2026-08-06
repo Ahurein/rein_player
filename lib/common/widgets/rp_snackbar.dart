@@ -107,7 +107,7 @@ class RpSnackbar {
   static void copied({String item = 'Item'}) {
     success(
       title: LocaleKeys.copied.tr,
-      message: LocaleKeys.copiedToClipboard.trArgs([item]),
+      message: LocaleKeys.copiedToClipboard.trArgsFmt([item]),
       duration: const Duration(seconds: 2),
     );
   }

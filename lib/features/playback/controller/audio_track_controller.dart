@@ -42,11 +42,11 @@ class AudioTrackController extends GetxController {
       RpSnackbar.success(
         title: LocaleKeys.snackAudioTrackChanged.tr,
         message: LocaleKeys.snackAudioTrackChangedMsg
-            .trArgs([getAudioTrackDisplayName(track)]),
+            .trArgsFmt([getAudioTrackDisplayName(track)]),
       );
     } catch (e) {
       RpSnackbar.error(
-        message: LocaleKeys.snackFailedSwitchAudioTrack.trArgs([e.toString()]),
+        message: LocaleKeys.snackFailedSwitchAudioTrack.trArgsFmt([e.toString()]),
       );
     }
   }

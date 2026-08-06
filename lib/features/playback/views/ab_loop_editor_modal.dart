@@ -341,7 +341,7 @@ class _ABLoopEditorModalState extends State<ABLoopEditorModal> {
       RpSnackbar.error(
         title: LocaleKeys.abLoopEditorInvalidInput.tr,
         message:
-            LocaleKeys.abLoopEditorInvalidInputMsg.trArgs([e.toString()]),
+            LocaleKeys.abLoopEditorInvalidInputMsg.trArgsFmt([e.toString()]),
       );
     }
   }

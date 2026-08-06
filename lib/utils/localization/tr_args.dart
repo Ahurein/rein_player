@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 extension TrArgs on String {
   /// Localizes this key and substitutes [args] into `%s`, `%1$s`, `%1$d` style
   /// placeholders present in the translation string.
-  String trArgs(List<Object> args) {
+  String trArgsFmt(List<Object> args) {
     var result = tr;
     if (args.isNotEmpty) {
       result = result.replaceFirst('%s', args.first.toString());

@@ -150,7 +150,7 @@ class KeyboardPreferencesController extends GetxController {
 
         RpSnackbar.info(
           title: LocaleKeys.snackKeyBindingUpdated.tr,
-          message: LocaleKeys.snackSwappedKeys.trArgs([
+          message: LocaleKeys.snackSwappedKeys.trArgsFmt([
             actionDescriptions[action] ?? '',
             actionDescriptions[existingAction] ?? '',
           ]),
@@ -163,7 +163,7 @@ class KeyboardPreferencesController extends GetxController {
 
       RpSnackbar.success(
         title: LocaleKeys.snackKeyBindingUpdated.tr,
-        message: LocaleKeys.snackKeyAssignedTo.trArgs([
+        message: LocaleKeys.snackKeyAssignedTo.trArgsFmt([
           actionDescriptions[action] ?? '',
           getKeyDisplayName(key),
         ]),

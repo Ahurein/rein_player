@@ -42,7 +42,7 @@ class _RpAboutDialogState extends State<RpAboutDialog> {
     try {
       await launchUrl(Uri.parse(AppInfo.repository));
     } catch (e) {
-      RpSnackbar.error(message: LocaleKeys.snackErrorLaunchingUrl.trArgs([e]));
+      RpSnackbar.error(message: LocaleKeys.snackErrorLaunchingUrl.trArgsFmt([e]));
     }
   }
 
@@ -100,7 +100,7 @@ class _RpAboutDialogState extends State<RpAboutDialog> {
 
               // Version
               Text(
-                LocaleKeys.aboutVersion.trArgs([
+                LocaleKeys.aboutVersion.trArgsFmt([
                   '$_version${_buildNumber.isNotEmpty ? '+$_buildNumber' : ''}'
                 ]),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(

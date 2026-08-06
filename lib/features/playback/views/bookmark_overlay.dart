@@ -378,7 +378,7 @@ class _BookmarkItemState extends State<_BookmarkItem> {
 
   Widget _buildNameDisplay() {
     final displayName = widget.bookmark.name.isEmpty
-        ? LocaleKeys.bookmarkDefaultName.trArgs([widget.index + 1])
+        ? LocaleKeys.bookmarkDefaultName.trArgsFmt([widget.index + 1])
         : widget.bookmark.name;
 
     return Text(

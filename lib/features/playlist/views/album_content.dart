@@ -121,7 +121,7 @@ class RpAlbumItems extends StatelessWidget {
             final confirmed = await RpDialog.showConfirmation(
               context: context,
               title: LocaleKeys.dialogDeleteFileTitle.tr,
-              message: LocaleKeys.dialogDeleteFileMessage.trArgs([media.name]),
+              message: LocaleKeys.dialogDeleteFileMessage.trArgsFmt([media.name]),
               confirmText: LocaleKeys.delete.tr,
               confirmColor: Colors.red,
               titleIcon: const Icon(Icons.delete_forever, color: Colors.red),

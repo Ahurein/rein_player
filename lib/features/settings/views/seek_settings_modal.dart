@@ -387,7 +387,7 @@ class _SecondsInput extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          LocaleKeys.seekRangeSeconds.trArgs([minValue, maxValue]),
+          LocaleKeys.seekRangeSeconds.trArgsFmt([minValue, maxValue]),
           style: const TextStyle(color: RpColors.white_300, fontSize: 11),
         ),
       ],

@@ -96,7 +96,7 @@ class ABLoopController extends GetxController {
         RpSnackbar.success(
           title: LocaleKeys.snackABLoopsLoaded.tr,
           message: LocaleKeys.snackSegmentsLoadedFrom
-              .trArgs([pbf.segments.length, path.basename(pbfPath)]),
+              .trArgsFmt([pbf.segments.length, path.basename(pbfPath)]),
         );
 
         // Auto-start playback if segments exist
@@ -105,7 +105,7 @@ class ABLoopController extends GetxController {
         }
       } catch (e) {
         RpSnackbar.error(
-          message: LocaleKeys.snackFailedLoadPBF.trArgs([e.toString()]),
+          message: LocaleKeys.snackFailedLoadPBF.trArgsFmt([e.toString()]),
         );
       }
     } else {
@@ -142,7 +142,7 @@ class ABLoopController extends GetxController {
       RpSnackbar.success(
         title: LocaleKeys.snackSegmentAdded.tr,
         message: LocaleKeys.snackSegmentAddedMsg
-            .trArgs([newSegment.formattedStartTime]),
+            .trArgsFmt([newSegment.formattedStartTime]),
       );
     } catch (e) {
       RpSnackbar.error(message: LocaleKeys.snackFailedAddSegment.tr);
@@ -227,7 +227,7 @@ class ABLoopController extends GetxController {
       RpSnackbar.success(
         title: LocaleKeys.snackSegmentDeleted.tr,
         message: LocaleKeys.snackSegmentDeletedMsg
-            .trArgs([segment.formattedStartTime]),
+            .trArgsFmt([segment.formattedStartTime]),
       );
 
       // Stop playback if no segments left
@@ -279,7 +279,7 @@ class ABLoopController extends GetxController {
       RpSnackbar.success(
         title: LocaleKeys.snackImportSuccessful.tr,
         message: LocaleKeys.snackImportSuccessfulMsg
-            .trArgs([pbf.segments.length]),
+            .trArgsFmt([pbf.segments.length]),
       );
 
       // Auto-start playback
@@ -288,7 +288,7 @@ class ABLoopController extends GetxController {
       }
     } catch (e) {
       RpSnackbar.error(
-        message: LocaleKeys.snackFailedImportPBF.trArgs([e.toString()]),
+        message: LocaleKeys.snackFailedImportPBF.trArgsFmt([e.toString()]),
       );
     }
   }
@@ -333,11 +333,11 @@ class ABLoopController extends GetxController {
       RpSnackbar.success(
         title: LocaleKeys.snackExportSuccessful.tr,
         message: LocaleKeys.snackExportSuccessfulMsg
-            .trArgs([path.basename(exportPath)]),
+            .trArgsFmt([path.basename(exportPath)]),
       );
     } catch (e) {
       RpSnackbar.error(
-        message: LocaleKeys.snackFailedExportPBF.trArgs([e.toString()]),
+        message: LocaleKeys.snackFailedExportPBF.trArgsFmt([e.toString()]),
       );
     }
   }
@@ -361,7 +361,7 @@ class ABLoopController extends GetxController {
     _startPositionMonitoring();
 
     RpSnackbar.info(
-      message: LocaleKeys.snackABLoopStarted.trArgs([segments.length]),
+      message: LocaleKeys.snackABLoopStarted.trArgsFmt([segments.length]),
     );
   }
 
@@ -405,7 +405,7 @@ class ABLoopController extends GetxController {
 
     RpSnackbar.info(
       message:
-          LocaleKeys.snackJumpedToSegment.trArgs([currentSegmentIndex.value + 1]),
+          LocaleKeys.snackJumpedToSegment.trArgsFmt([currentSegmentIndex.value + 1]),
     );
   }
 
@@ -425,7 +425,7 @@ class ABLoopController extends GetxController {
 
     RpSnackbar.info(
       message:
-          LocaleKeys.snackJumpedToSegment.trArgs([currentSegmentIndex.value + 1]),
+          LocaleKeys.snackJumpedToSegment.trArgsFmt([currentSegmentIndex.value + 1]),
     );
   }
 

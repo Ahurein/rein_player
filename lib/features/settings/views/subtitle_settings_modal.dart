@@ -316,7 +316,7 @@ class _PositionTab extends StatelessWidget {
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
-                      LocaleKeys.subtitleVerticalHorizontal.trArgs([
+                      LocaleKeys.subtitleVerticalHorizontal.trArgsFmt([
                         controller.settings.value.verticalPosition
                             .toStringAsFixed(0),
                         controller.settings.value.horizontalPosition
@@ -586,7 +586,7 @@ class _ColorPickerButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
         ),
         title: Text(
-          LocaleKeys.subtitlePickColor.trArgs([label.tr]),
+          LocaleKeys.subtitlePickColor.trArgsFmt([label.tr]),
           style: const TextStyle(color: RpColors.white, fontSize: 16),
         ),
         content: SingleChildScrollView(

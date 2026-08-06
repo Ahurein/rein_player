@@ -59,7 +59,7 @@ class BookmarkController extends GetxController {
       if (existingBookmark != null) {
         RpSnackbar.info(
           message: LocaleKeys.snackBookmarkExists
-              .trArgs([existingBookmark.formattedTimestamp]),
+              .trArgsFmt([existingBookmark.formattedTimestamp]),
         );
         return;
       }
@@ -80,7 +80,7 @@ class BookmarkController extends GetxController {
       RpSnackbar.success(
         title: LocaleKeys.snackBookmarkAdded.tr,
         message:
-            LocaleKeys.snackBookmarkAddedMsg.trArgs([bookmark.formattedTimestamp]),
+            LocaleKeys.snackBookmarkAddedMsg.trArgsFmt([bookmark.formattedTimestamp]),
       );
     } catch (e) {
       RpSnackbar.error(
@@ -105,7 +105,7 @@ class BookmarkController extends GetxController {
       RpSnackbar.success(
         title: LocaleKeys.snackBookmarkDeleted.tr,
         message: LocaleKeys.snackBookmarkDeletedMsg
-            .trArgs([bookmark.formattedTimestamp]),
+            .trArgsFmt([bookmark.formattedTimestamp]),
       );
     } catch (e) {
       RpSnackbar.error(
@@ -188,12 +188,12 @@ class BookmarkController extends GetxController {
       nextBookmark = bookmarks.first;
       RpSnackbar.info(
         message: LocaleKeys.snackJumpedFirstBookmark
-            .trArgs([nextBookmark.formattedTimestamp]),
+            .trArgsFmt([nextBookmark.formattedTimestamp]),
       );
     } else {
       RpSnackbar.info(
         message: LocaleKeys.snackJumpedBookmark
-            .trArgs([nextBookmark.formattedTimestamp]),
+            .trArgsFmt([nextBookmark.formattedTimestamp]),
       );
     }
 
@@ -226,12 +226,12 @@ class BookmarkController extends GetxController {
       prevBookmark = bookmarks.last;
       RpSnackbar.info(
         message: LocaleKeys.snackJumpedLastBookmark
-            .trArgs([prevBookmark.formattedTimestamp]),
+            .trArgsFmt([prevBookmark.formattedTimestamp]),
       );
     } else {
       RpSnackbar.info(
         message: LocaleKeys.snackJumpedBookmark
-            .trArgs([prevBookmark.formattedTimestamp]),
+            .trArgsFmt([prevBookmark.formattedTimestamp]),
       );
     }
 
@@ -246,7 +246,7 @@ class BookmarkController extends GetxController {
     await _jumpToTimestamp(bookmark.timestamp);
 
     RpSnackbar.info(
-      message: LocaleKeys.snackJumpedToTime.trArgs([bookmark.formattedTimestamp]),
+      message: LocaleKeys.snackJumpedToTime.trArgsFmt([bookmark.formattedTimestamp]),
     );
   }
 
