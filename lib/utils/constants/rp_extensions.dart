@@ -23,6 +23,6 @@ class RpFileExtensions {
   ];
 
   static const subtitleExtensions = [
-    '.srt'
+    '.srt', '.vtt', '.ass', '.ssa',
   ];
 }

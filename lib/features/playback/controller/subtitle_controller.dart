@@ -36,7 +36,7 @@ class SubtitleController extends GetxController {
   void loadSubtitle() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
-      allowedExtensions: ['srt', 'vtt'],
+      allowedExtensions: ['srt', 'vtt', 'ass', 'ssa'],
       allowMultiple: false,
     );
 
@@ -47,7 +47,10 @@ class SubtitleController extends GetxController {
       log(content);
 
       final extension = filePath.split(".").last.toLowerCase();
-      if (extension == "srt" || extension == "vtt") {
+      if (extension == "srt" ||
+          extension == "vtt" ||
+          extension == "ass" ||
+          extension == "ssa") {
         currentSubtitleContent = content;
         isSubtitleEnabled.value = true;
         await player.setSubtitleTrack(SubtitleTrack.data(content));
@@ -57,7 +60,7 @@ class SubtitleController extends GetxController {
         );
       } else {
         RpSnackbar.error(
-          message: 'Only SRT and VTT subtitle formats are supported',
+          message: 'Only SRT, VTT, ASS and SSA subtitle formats are supported',
         );
       }
     }
