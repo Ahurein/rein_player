@@ -7,6 +7,7 @@ import 'package:rein_player/features/playlist/controller/album_controller.dart';
 import 'package:rein_player/features/playlist/models/album.dart';
 import 'package:rein_player/utils/constants/rp_sizes.dart';
 import 'package:rein_player/utils/local_storage/rp_local_storage.dart';
+import 'package:rein_player/utils/localization/locale_keys.dart';
 import 'package:window_manager/window_manager.dart';
 
 import '../views/add_playlist_modal.dart';
@@ -80,15 +81,15 @@ class PlaylistController extends GetxController {
   void createNewPlaylist() async {
     if (playlistNameController.text.trim().isEmpty ||
         selectedFolderPath.isEmpty) {
-      RpSnackbar.error(message: 'Please fill in all fields');
+      RpSnackbar.error(message: LocaleKeys.snackFillAllFields.tr);
       return;
     }
 
     if (AlbumController.to.albums
         .any((album) => album.location == selectedFolderPath.value)) {
       RpSnackbar.warning(
-        title: 'Already Added',
-        message: 'This album is already in your playlist',
+        title: LocaleKeys.snackAlreadyAdded.tr,
+        message: LocaleKeys.snackAlreadyAddedMsg.tr,
       );
       return;
     }
@@ -108,8 +109,8 @@ class PlaylistController extends GetxController {
     Get.back();
 
     RpSnackbar.success(
-      title: 'Playlist Created',
-      message: 'New playlist has been added successfully',
+      title: LocaleKeys.snackPlaylistCreated.tr,
+      message: LocaleKeys.snackPlaylistCreatedMsg.tr,
     );
   }
 

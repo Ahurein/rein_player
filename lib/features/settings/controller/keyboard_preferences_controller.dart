@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:rein_player/common/widgets/rp_snackbar.dart';
 import 'package:rein_player/utils/constants/rp_keys.dart';
 import 'package:rein_player/utils/local_storage/rp_local_storage.dart';
+import 'package:rein_player/utils/localization/locale_keys.dart';
+import 'package:rein_player/utils/localization/tr_args.dart';
 
 class KeyboardPreferencesController extends GetxController {
   static KeyboardPreferencesController get to => Get.find();
@@ -49,39 +51,39 @@ class KeyboardPreferencesController extends GetxController {
   };
 
   // Action descriptions for UI
-  static const Map<String, String> actionDescriptions = {
-    'play_pause': 'Play/Pause',
-    'toggle_fullscreen': 'Enter Fullscreen',
-    'toggle_maximize_window': 'Toggle Maximize Window',
-    'seek_backward': 'Seek Backward',
-    'seek_forward': 'Seek Forward',
-    'big_seek_backward': 'Big Seek Backward',
-    'big_seek_forward': 'Big Seek Forward',
-    'volume_up': 'Volume Up',
-    'volume_down': 'Volume Down',
-    'toggle_mute': 'Toggle Mute',
-    'toggle_subtitle': 'Toggle Subtitles',
-    'exit_fullscreen': 'Exit Fullscreen',
-    'toggle_playlist': 'Toggle Playlist',
-    'toggle_developer_log': 'Toggle Developer Log',
-    'toggle_keyboard_bindings': 'Toggle Keyboard Bindings',
-    'decrease_speed': 'Decrease Playback Speed',
-    'increase_speed': 'Increase Playback Speed',
-    'next_track': 'Next Track',
-    'previous_track': 'Previous Track',
-    'delete_and_skip': 'Delete playlist Item and Skip to Next',
-    'shuffle_playlist': 'Shuffle Playlist',
-    'add_bookmark': 'Add Bookmark',
-    'next_bookmark': 'Jump to Next Bookmark',
-    'previous_bookmark': 'Jump to Previous Bookmark',
-    'toggle_bookmark_list': 'Toggle Bookmark List',
-    'add_ab_loop_segment': 'Add A-B Loop Segment',
-    'toggle_ab_loop_overlay': 'Toggle A-B Loop Overlay',
-    'toggle_ab_loop_playback': 'Start/Stop A-B Loop Playback',
-    'previous_ab_loop_segment': 'Jump to Previous A-B Loop Segment',
-    'next_ab_loop_segment': 'Jump to Next A-B Loop Segment',
-    'export_ab_loops': 'Export A-B Loops to PBF File',
-  };
+  static Map<String, String> get actionDescriptions => {
+        'play_pause': LocaleKeys.kbdPlayPause.tr,
+        'toggle_fullscreen': LocaleKeys.kbdEnterFullscreen.tr,
+        'toggle_maximize_window': LocaleKeys.kbdToggleMaximize.tr,
+        'seek_backward': LocaleKeys.kbdSeekBackward.tr,
+        'seek_forward': LocaleKeys.kbdSeekForward.tr,
+        'big_seek_backward': LocaleKeys.kbdBigSeekBackward.tr,
+        'big_seek_forward': LocaleKeys.kbdBigSeekForward.tr,
+        'volume_up': LocaleKeys.kbdVolumeUp.tr,
+        'volume_down': LocaleKeys.kbdVolumeDown.tr,
+        'toggle_mute': LocaleKeys.kbdToggleMute.tr,
+        'toggle_subtitle': LocaleKeys.kbdToggleSubtitles.tr,
+        'exit_fullscreen': LocaleKeys.kbdExitFullscreen.tr,
+        'toggle_playlist': LocaleKeys.kbdTogglePlaylist.tr,
+        'toggle_developer_log': LocaleKeys.kbdToggleDeveloperLog.tr,
+        'toggle_keyboard_bindings': LocaleKeys.kbdToggleKeyboardBindings.tr,
+        'decrease_speed': LocaleKeys.kbdDecreaseSpeed.tr,
+        'increase_speed': LocaleKeys.kbdIncreaseSpeed.tr,
+        'next_track': LocaleKeys.kbdNextTrack.tr,
+        'previous_track': LocaleKeys.kbdPreviousTrack.tr,
+        'delete_and_skip': LocaleKeys.kbdDeleteAndSkip.tr,
+        'shuffle_playlist': LocaleKeys.kbdShufflePlaylist.tr,
+        'add_bookmark': LocaleKeys.kbdAddBookmark.tr,
+        'next_bookmark': LocaleKeys.kbdNextBookmark.tr,
+        'previous_bookmark': LocaleKeys.kbdPreviousBookmark.tr,
+        'toggle_bookmark_list': LocaleKeys.kbdToggleBookmarkList.tr,
+        'add_ab_loop_segment': LocaleKeys.kbdAddAbLoopSegment.tr,
+        'toggle_ab_loop_overlay': LocaleKeys.kbdToggleAbLoopOverlay.tr,
+        'toggle_ab_loop_playback': LocaleKeys.kbdToggleAbLoopPlayback.tr,
+        'previous_ab_loop_segment': LocaleKeys.kbdPreviousAbLoopSegment.tr,
+        'next_ab_loop_segment': LocaleKeys.kbdNextAbLoopSegment.tr,
+        'export_ab_loops': LocaleKeys.kbdExportAbLoops.tr,
+      };
 
   @override
   void onInit() {
@@ -147,9 +149,11 @@ class KeyboardPreferencesController extends GetxController {
         update();
 
         RpSnackbar.info(
-          title: 'Key Binding Updated',
-          message:
-              'Swapped keys for "${actionDescriptions[action]}" and "${actionDescriptions[existingAction]}"',
+          title: LocaleKeys.snackKeyBindingUpdated.tr,
+          message: LocaleKeys.snackSwappedKeys.trArgs([
+            actionDescriptions[action] ?? '',
+            actionDescriptions[existingAction] ?? '',
+          ]),
         );
       }
     } else {
@@ -158,9 +162,11 @@ class KeyboardPreferencesController extends GetxController {
       update();
 
       RpSnackbar.success(
-        title: 'Key Binding Updated',
-        message:
-            '${actionDescriptions[action]} is now assigned to ${getKeyDisplayName(key)}',
+        title: LocaleKeys.snackKeyBindingUpdated.tr,
+        message: LocaleKeys.snackKeyAssignedTo.trArgs([
+          actionDescriptions[action] ?? '',
+          getKeyDisplayName(key),
+        ]),
       );
     }
 
@@ -185,8 +191,8 @@ class KeyboardPreferencesController extends GetxController {
     await saveKeyBindings();
 
     RpSnackbar.success(
-      title: 'Reset Complete',
-      message: 'Keyboard bindings have been reset to defaults',
+      title: LocaleKeys.snackResetComplete.tr,
+      message: LocaleKeys.snackResetCompleteMsg.tr,
     );
   }
 

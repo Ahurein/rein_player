@@ -15,6 +15,7 @@ import 'package:rein_player/features/playlist/controller/playlist_controller.dar
 import 'package:rein_player/features/settings/controller/keyboard_preferences_controller.dart';
 import 'package:rein_player/features/settings/views/keyboard_bindings_modal.dart';
 import 'package:rein_player/utils/constants/rp_enums.dart';
+import 'package:rein_player/utils/localization/locale_keys.dart';
 
 class KeyboardController extends GetxController {
   static KeyboardController get to => Get.find();
@@ -259,11 +260,11 @@ class KeyboardController extends GetxController {
             await AlbumContentController.to.deleteCurrentItemAndSkip();
         if (success) {
           RpSnackbar.success(
-            title: 'Deleted',
-            message: 'File deleted and skipped to next',
+            title: LocaleKeys.snackDeleted.tr,
+            message: LocaleKeys.snackDeletedAndSkipped.tr,
           );
         } else {
-          RpSnackbar.error(message: 'Failed to delete file');
+          RpSnackbar.error(message: LocaleKeys.snackFailedDeleteFile.tr);
         }
         return;
       }
@@ -272,8 +273,8 @@ class KeyboardController extends GetxController {
       if (currentKey == keyBindings['shuffle_playlist']) {
         AlbumContentController.to.shufflePlaylistContent();
         RpSnackbar.success(
-          title: 'Playlist Shuffled',
-          message: 'Playlist order has been randomized',
+          title: LocaleKeys.snackPlaylistShuffled.tr,
+          message: LocaleKeys.snackPlaylistShuffledMsg.tr,
         );
         return;
       }

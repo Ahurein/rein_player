@@ -5,6 +5,8 @@ import 'package:rein_player/common/widgets/rp_snackbar.dart';
 import 'package:rein_player/features/settings/controller/subtitle_styling_controller.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
 import 'package:rein_player/utils/constants/subtitle_constants.dart';
+import 'package:rein_player/utils/localization/locale_keys.dart';
+import 'package:rein_player/utils/localization/tr_args.dart';
 
 /// Subtitle settings modal
 class SubtitleSettingsModal extends StatelessWidget {
@@ -36,7 +38,7 @@ class SubtitleSettingsModal extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Subtitle Settings',
+                    LocaleKeys.subtitleTitle.tr,
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                           color: RpColors.white,
                           fontWeight: FontWeight.bold,
@@ -57,10 +59,10 @@ class SubtitleSettingsModal extends StatelessWidget {
                 labelColor: RpColors.accent,
                 unselectedLabelColor: RpColors.white_300,
                 labelStyle: const TextStyle(fontSize: 14),
-                tabs: const [
-                  Tab(text: 'Font'),
-                  Tab(text: 'Position'),
-                  Tab(text: 'Advanced'),
+                tabs: [
+                  Tab(text: LocaleKeys.subtitleTabFont.tr),
+                  Tab(text: LocaleKeys.subtitleTabPosition.tr),
+                  Tab(text: LocaleKeys.subtitleTabAdvanced.tr),
                 ],
               ),
               const SizedBox(height: 16),
@@ -85,14 +87,14 @@ class SubtitleSettingsModal extends StatelessWidget {
                     onPressed: () async {
                       await SubtitleStylingController.to.resetToDefaults();
                       RpSnackbar.success(
-                        title: 'Reset',
-                        message: 'Subtitle settings reset to defaults',
+                        title: LocaleKeys.subtitleResetToDefaults.tr,
+                        message: LocaleKeys.subtitleResetMsg.tr,
                       );
                     },
                     icon: const Icon(Icons.restore, size: 16),
-                    label: const Text(
-                      'Reset to Defaults',
-                      style: TextStyle(fontSize: 12),
+                    label: Text(
+                      LocaleKeys.subtitleResetToDefaults.tr,
+                      style: const TextStyle(fontSize: 12),
                     ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: RpColors.black_600,
@@ -101,9 +103,9 @@ class SubtitleSettingsModal extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () => Get.back(),
-                    child: const Text(
-                      'Close',
-                      style: TextStyle(color: RpColors.accent, fontSize: 12),
+                    child: Text(
+                      LocaleKeys.close.tr,
+                      style: const TextStyle(color: RpColors.accent, fontSize: 12),
                     ),
                   ),
                 ],
@@ -132,7 +134,7 @@ class _FontTab extends StatelessWidget {
           children: [
             // Font Family
             Text(
-              'Font',
+              LocaleKeys.subtitleFont.tr,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: RpColors.white,
                     fontSize: 14,
@@ -168,7 +170,7 @@ class _FontTab extends StatelessWidget {
 
             // Font Size
             Text(
-              'Size',
+              LocaleKeys.subtitleSize.tr,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: RpColors.white,
                     fontSize: 14,
@@ -209,7 +211,7 @@ class _FontTab extends StatelessWidget {
 
             // Preview
             Text(
-              'Preview',
+              LocaleKeys.subtitlePreview.tr,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: RpColors.white,
                     fontSize: 14,
@@ -224,7 +226,7 @@ class _FontTab extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Obx(() => Text(
-                    'Sample Subtitle Text',
+                    LocaleKeys.subtitleSampleText.tr,
                     style: controller.getSubtitleTextStyle(),
                     textAlign: controller.settings.value.textAlign,
                   )),
@@ -251,7 +253,7 @@ class _PositionTab extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Position',
+              LocaleKeys.subtitleTabPosition.tr,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: RpColors.white,
                     fontSize: 14,
@@ -266,7 +268,7 @@ class _PositionTab extends StatelessWidget {
                 // Up button
                 _PositionButton(
                   icon: Icons.arrow_upward,
-                  label: 'Up',
+                  label: LocaleKeys.subtitleUp.tr,
                   onPressed: controller.moveUp,
                 ),
               ],
@@ -278,14 +280,14 @@ class _PositionTab extends StatelessWidget {
                 // Left button
                 _PositionButton(
                   icon: Icons.arrow_back,
-                  label: 'Left',
+                  label: LocaleKeys.subtitleLeft.tr,
                   onPressed: controller.moveLeft,
                 ),
                 const SizedBox(width: 60),
                 // Right button
                 _PositionButton(
                   icon: Icons.arrow_forward,
-                  label: 'Right',
+                  label: LocaleKeys.subtitleRight.tr,
                   onPressed: controller.moveRight,
                 ),
               ],
@@ -297,7 +299,7 @@ class _PositionTab extends StatelessWidget {
                 // Down button
                 _PositionButton(
                   icon: Icons.arrow_downward,
-                  label: 'Down',
+                  label: LocaleKeys.subtitleDown.tr,
                   onPressed: controller.moveDown,
                 ),
               ],
@@ -314,8 +316,12 @@ class _PositionTab extends StatelessWidget {
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
-                      'Vertical: ${controller.settings.value.verticalPosition.toStringAsFixed(0)}px  |  '
-                      'Horizontal: ${controller.settings.value.horizontalPosition.toStringAsFixed(0)}px',
+                      LocaleKeys.subtitleVerticalHorizontal.trArgs([
+                        controller.settings.value.verticalPosition
+                            .toStringAsFixed(0),
+                        controller.settings.value.horizontalPosition
+                            .toStringAsFixed(0),
+                      ]),
                       style:
                           const TextStyle(color: RpColors.white, fontSize: 12),
                     ),
@@ -344,7 +350,7 @@ class _AdvancedTab extends StatelessWidget {
           children: [
             // Text Alignment
             Text(
-              'Text Alignment',
+              LocaleKeys.subtitleTextAlignment.tr,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: RpColors.white,
                     fontSize: 14,
@@ -382,7 +388,7 @@ class _AdvancedTab extends StatelessWidget {
 
             // Text Color
             Text(
-              'Text Color',
+              LocaleKeys.subtitleTextColor.tr,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: RpColors.white,
                     fontSize: 14,
@@ -392,13 +398,13 @@ class _AdvancedTab extends StatelessWidget {
             Obx(() => _ColorPickerButton(
                   color: controller.settings.value.textColor,
                   onColorChanged: controller.updateTextColor,
-                  label: 'Text',
+                  label: LocaleKeys.subtitleText.tr,
                 )),
             const SizedBox(height: 20),
 
             // Background Color
             Text(
-              'Background Color',
+              LocaleKeys.subtitleBackgroundColor.tr,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: RpColors.white,
                     fontSize: 14,
@@ -408,13 +414,13 @@ class _AdvancedTab extends StatelessWidget {
             Obx(() => _ColorPickerButton(
                   color: controller.settings.value.backgroundColor,
                   onColorChanged: controller.updateBackgroundColor,
-                  label: 'Background',
+                  label: LocaleKeys.subtitleBackground.tr,
                 )),
             const SizedBox(height: 20),
 
             // Outline Width
             Text(
-              'Outline Width',
+              LocaleKeys.subtitleOutlineWidth.tr,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: RpColors.white,
                     fontSize: 14,
@@ -580,7 +586,7 @@ class _ColorPickerButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
         ),
         title: Text(
-          'Pick $label Color',
+          LocaleKeys.subtitlePickColor.trArgs([label.tr]),
           style: const TextStyle(color: RpColors.white, fontSize: 16),
         ),
         content: SingleChildScrollView(
@@ -601,22 +607,22 @@ class _ColorPickerButton extends StatelessWidget {
             wheelSquarePadding: 4,
             wheelSquareBorderRadius: 4,
             wheelHasBorder: true,
-            heading: const Text(
-              'Select color',
-              style: TextStyle(color: RpColors.white, fontSize: 14),
+            heading: Text(
+              LocaleKeys.subtitleSelectColor.tr,
+              style: const TextStyle(color: RpColors.white, fontSize: 14),
             ),
-            subheading: const Text(
-              'Select color shade',
-              style: TextStyle(color: RpColors.white_300, fontSize: 12),
+            subheading: Text(
+              LocaleKeys.subtitleSelectColorShade.tr,
+              style: const TextStyle(color: RpColors.white_300, fontSize: 12),
             ),
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text(
-              'Done',
-              style: TextStyle(color: RpColors.accent, fontSize: 12),
+            child: Text(
+              LocaleKeys.subtitleDone.tr,
+              style: const TextStyle(color: RpColors.accent, fontSize: 12),
             ),
           ),
         ],

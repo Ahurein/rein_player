@@ -11,7 +11,11 @@ import 'package:rein_player/features/player_frame/controller/window_actions_cont
 import 'package:rein_player/features/player_frame/controller/window_controller.dart';
 import 'package:rein_player/features/player_frame/views/fullscreen_overlay.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
+import 'package:rein_player/utils/constants/rp_keys.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
+import 'package:rein_player/utils/local_storage/rp_local_storage.dart';
+import 'package:rein_player/utils/localization/app_languages.dart';
+import 'package:rein_player/utils/localization/app_translations.dart';
 import 'package:rein_player/utils/theme/theme.dart';
 
 import 'features/player_frame/views/window_frame.dart';
@@ -28,6 +32,15 @@ class RpApp extends StatelessWidget {
 
   RpApp({super.key});
 
+  Locale _initialLocale() {
+    final stored = RpLocalStorage().readData<Map>(RpKeysConstants.settingsKey);
+    if (stored != null && stored[RpKeysConstants.languageKey] != null) {
+      return AppLanguage.fromCode(stored[RpKeysConstants.languageKey] as String?)
+          .locale;
+    }
+    return Get.deviceLocale ?? const Locale('en');
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -36,6 +49,9 @@ class RpApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       darkTheme: RpAppTheme.darkTheme,
       themeMode: ThemeMode.dark,
+      translations: AppTranslations(),
+      locale: _initialLocale(),
+      fallbackLocale: const Locale('en'),
       home: LayoutBuilder(
         builder: (context, constraints) {
           // Only render app content when window is properly sized

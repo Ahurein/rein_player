@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
+import 'package:rein_player/utils/localization/locale_keys.dart';
 
 class RpDialog {
   static Future<T?> show<T>({
@@ -78,8 +80,8 @@ class RpDialog {
     required BuildContext context,
     required String title,
     required String message,
-    String confirmText = 'Confirm',
-    String cancelText = 'Cancel',
+    String confirmText = '',
+    String cancelText = '',
     Color confirmColor = Colors.red,
     Widget? titleIcon,
     double maxWidth = 400,
@@ -100,7 +102,7 @@ class RpDialog {
         TextButton(
           onPressed: () => Navigator.of(context).pop(false),
           child: Text(
-            cancelText,
+            cancelText.isEmpty ? LocaleKeys.cancel.tr : cancelText,
             style: const TextStyle(color: RpColors.black_300),
           ),
         ),
@@ -111,7 +113,7 @@ class RpDialog {
             backgroundColor: confirmColor,
             foregroundColor: Colors.white,
           ),
-          child: Text(confirmText),
+          child: Text(confirmText.isEmpty ? LocaleKeys.confirm.tr : confirmText),
         ),
       ],
     );
@@ -121,7 +123,7 @@ class RpDialog {
     required BuildContext context,
     required String title,
     required Widget content,
-    String closeText = 'Close',
+    String closeText = '',
     Widget? titleIcon,
     double maxWidth = 500,
   }) {
@@ -135,7 +137,7 @@ class RpDialog {
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
           child: Text(
-            closeText,
+            closeText.isEmpty ? LocaleKeys.close.tr : closeText,
             style: const TextStyle(color: RpColors.accent),
           ),
         ),

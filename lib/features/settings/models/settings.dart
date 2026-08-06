@@ -1,5 +1,6 @@
 import 'package:rein_player/utils/constants/rp_enums.dart';
 import 'package:rein_player/utils/constants/rp_keys.dart';
+import 'package:rein_player/utils/localization/app_languages.dart';
 
 class Settings {
   bool isSubtitleEnabled;
@@ -7,6 +8,7 @@ class Settings {
   DoubleClickAction doubleClickAction;
   PlaylistLoadBehavior playlistLoadBehavior;
   PlaylistEndBehavior playlistEndBehavior;
+  AppLanguage language;
 
   Settings({
     this.isSubtitleEnabled = true,
@@ -14,6 +16,7 @@ class Settings {
     this.doubleClickAction = DoubleClickAction.toggleWindowSize,
     this.playlistLoadBehavior = PlaylistLoadBehavior.clearAndReplace,
     this.playlistEndBehavior = PlaylistEndBehavior.showHomeScreen,
+    this.language = AppLanguage.english,
   });
 
   factory Settings.fromJson(Map<String, dynamic> json) {
@@ -40,6 +43,7 @@ class Settings {
       doubleClickAction: savedDoubleClickAction,
       playlistLoadBehavior: savedPlaylistLoadBehavior,
       playlistEndBehavior: savedPlaylistEndBehavior,
+      language: AppLanguage.fromCode(json[RpKeysConstants.languageKey] as String?),
     );
   }
 
@@ -50,6 +54,7 @@ class Settings {
       RpKeysConstants.doubleClickActionKey: doubleClickAction.name,
       RpKeysConstants.playlistLoadBehaviorKey: playlistLoadBehavior.name,
       RpKeysConstants.playlistEndBehaviorKey: playlistEndBehavior.name,
+      RpKeysConstants.languageKey: language.code,
     };
   }
 

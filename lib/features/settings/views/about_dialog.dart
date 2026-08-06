@@ -4,6 +4,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:rein_player/common/widgets/rp_snackbar.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
 import 'package:rein_player/utils/constants/app_info.dart';
+import 'package:rein_player/utils/localization/locale_keys.dart';
+import 'package:rein_player/utils/localization/tr_args.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class RpAboutDialog extends StatefulWidget {
@@ -40,7 +42,7 @@ class _RpAboutDialogState extends State<RpAboutDialog> {
     try {
       await launchUrl(Uri.parse(AppInfo.repository));
     } catch (e) {
-      RpSnackbar.error(message: 'Error launching URL: $e');
+      RpSnackbar.error(message: LocaleKeys.snackErrorLaunchingUrl.trArgs([e]));
     }
   }
 
@@ -98,7 +100,9 @@ class _RpAboutDialogState extends State<RpAboutDialog> {
 
               // Version
               Text(
-                'Version $_version${_buildNumber.isNotEmpty ? '+$_buildNumber' : ''}',
+                LocaleKeys.aboutVersion.trArgs([
+                  '$_version${_buildNumber.isNotEmpty ? '+$_buildNumber' : ''}'
+                ]),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: RpColors.white_300,
                     ),
@@ -119,7 +123,7 @@ class _RpAboutDialogState extends State<RpAboutDialog> {
               InkWell(
                 onTap: _openGitHub,
                 child: Text(
-                  'View on GitHub',
+                  LocaleKeys.aboutViewOnGitHub.tr,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Colors.blue.shade400,
                       ),
@@ -140,7 +144,7 @@ class _RpAboutDialogState extends State<RpAboutDialog> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text('Close'),
+                  child: Text(LocaleKeys.close.tr),
                 ),
               ),
             ],

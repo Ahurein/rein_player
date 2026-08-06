@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rein_player/features/settings/controller/keyboard_preferences_controller.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
+import 'package:rein_player/utils/localization/locale_keys.dart';
 
 class KeyboardBindingsModal extends StatefulWidget {
   const KeyboardBindingsModal({super.key});
@@ -28,15 +29,15 @@ class _KeyboardBindingsModalState extends State<KeyboardBindingsModal> {
           width: 400,
           height: 200,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: const Center(
+          child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircularProgressIndicator(color: RpColors.accent),
-                SizedBox(height: 16),
+                const CircularProgressIndicator(color: RpColors.accent),
+                const SizedBox(height: 16),
                 Text(
-                  'Loading keyboard preferences...',
-                  style: TextStyle(color: Colors.white, fontSize: 14),
+                  LocaleKeys.keyboardLoading.tr,
+                  style: const TextStyle(color: Colors.white, fontSize: 14),
                 ),
               ],
             ),
@@ -68,7 +69,7 @@ class _KeyboardBindingsModalState extends State<KeyboardBindingsModal> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Keyboard Bindings',
+                  LocaleKeys.keyboardTitle.tr,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         color: RpColors.white,
                         fontWeight: FontWeight.bold,
@@ -85,7 +86,9 @@ class _KeyboardBindingsModalState extends State<KeyboardBindingsModal> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            isEnabled ? 'Enabled' : 'Disabled',
+                            isEnabled
+                                ? LocaleKeys.keyboardEnabled.tr
+                                : LocaleKeys.keyboardDisabled.tr,
                             style: const TextStyle(color: RpColors.white, fontSize: 14),
                           ),
                           const SizedBox(width: 6),
@@ -117,7 +120,7 @@ class _KeyboardBindingsModalState extends State<KeyboardBindingsModal> {
             const SizedBox(height: 10),
 
             Text(
-              'Click on a key binding to change it. Press the new key you want to assign.',
+              LocaleKeys.keyboardInstruction.tr,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: RpColors.white_300,
                     fontSize: 14,
@@ -136,14 +139,14 @@ class _KeyboardBindingsModalState extends State<KeyboardBindingsModal> {
                     borderRadius: BorderRadius.circular(4),
                     border: Border.all(color: RpColors.orange.withValues(alpha: 0.5)),
                   ),
-                  child: const Row(
+                  child: Row(
                     children: [
-                      Icon(Icons.warning_amber_rounded, color: RpColors.orange, size: 18),
-                      SizedBox(width: 10),
+                      const Icon(Icons.warning_amber_rounded, color: RpColors.orange, size: 18),
+                      const SizedBox(width: 10),
                       Expanded(
                         child: Text(
-                          'Keyboard shortcuts are currently disabled. Use the toggle above to enable them.',
-                          style: TextStyle(color: RpColors.orange, fontSize: 12),
+                          LocaleKeys.keyboardDisabledWarning.tr,
+                          style: const TextStyle(color: RpColors.orange, fontSize: 12),
                         ),
                       ),
                     ],
@@ -161,9 +164,9 @@ class _KeyboardBindingsModalState extends State<KeyboardBindingsModal> {
                     await KeyboardPreferencesController.to.resetToDefaults();
                   },
                   icon: const Icon(Icons.restore),
-                  label: const Text(
-                    'Reset to Defaults',
-                    style: TextStyle(fontSize: 12),
+                  label: Text(
+                    LocaleKeys.seekResetToDefaults.tr,
+                    style: const TextStyle(fontSize: 12),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: RpColors.black_600,
@@ -180,9 +183,9 @@ class _KeyboardBindingsModalState extends State<KeyboardBindingsModal> {
                       borderRadius: BorderRadius.circular(4),
                       border: Border.all(color: RpColors.accent),
                     ),
-                    child: const Text(
-                      'Press any key...',
-                      style: TextStyle(
+                    child: Text(
+                      LocaleKeys.keyboardPressAnyKey.tr,
+                      style: const TextStyle(
                         color: RpColors.accent,
                         fontSize: 12,
                       ),
@@ -249,7 +252,7 @@ class _KeyboardBindingsModalState extends State<KeyboardBindingsModal> {
                               child: Text(
                                 currentKey != null
                                     ? controller.getKeyDisplayName(currentKey)
-                                    : 'Unassigned',
+                                    : LocaleKeys.keyboardUnassigned.tr,
                                 style: TextStyle(
                                   color: editingAction == action
                                       ? RpColors.accent
@@ -277,9 +280,9 @@ class _KeyboardBindingsModalState extends State<KeyboardBindingsModal> {
               children: [
                 TextButton(
                   onPressed: () => Get.back(),
-                  child: const Text(
-                    'Close',
-                    style: TextStyle(color: RpColors.accent),
+                  child: Text(
+                    LocaleKeys.close.tr,
+                    style: const TextStyle(color: RpColors.accent),
                   ),
                 ),
               ],
@@ -311,19 +314,19 @@ class _KeyboardBindingsModalState extends State<KeyboardBindingsModal> {
     ];
 
     if (actionsToHoldCtrlShift.contains(action)) {
-      return const Text(
-        'Hold Ctrl + Shift + key',
-        style: TextStyle(color: RpColors.black_500, fontSize: 11),
+      return Text(
+        LocaleKeys.keyboardHoldCtrlShift.tr,
+        style: const TextStyle(color: RpColors.black_500, fontSize: 11),
       );
     } else if (actionsToHoldShift.contains(action)) {
-      return const Text(
-        'Hold Shift + key',
-        style: TextStyle(color: RpColors.black_500, fontSize: 11),
+      return Text(
+        LocaleKeys.keyboardHoldShift.tr,
+        style: const TextStyle(color: RpColors.black_500, fontSize: 11),
       );
     } else if (actionsToHoldCtrl.contains(action)) {
-      return const Text(
-        'Hold Ctrl + key',
-        style: TextStyle(color: RpColors.black_500, fontSize: 11),
+      return Text(
+        LocaleKeys.keyboardHoldCtrl.tr,
+        style: const TextStyle(color: RpColors.black_500, fontSize: 11),
       );
     }
     return null;
@@ -384,7 +387,7 @@ class _KeyboardBindingsModalState extends State<KeyboardBindingsModal> {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'Press a key for',
+                  LocaleKeys.keyboardPressKeyFor.tr,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: RpColors.white,
                         fontSize: 14,
@@ -410,9 +413,9 @@ class _KeyboardBindingsModalState extends State<KeyboardBindingsModal> {
                       isListeningForKey = false;
                     });
                   },
-                  child: const Text(
-                    'Cancel',
-                    style: TextStyle(
+                  child: Text(
+                    LocaleKeys.cancel.tr,
+                    style: const TextStyle(
                       color: RpColors.white_300,
                       fontSize: 12,
                     ),

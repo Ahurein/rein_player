@@ -7,6 +7,9 @@ class RpKeysConstants {
 
   static const String settingsKey = "settingsKey";
 
+  /// language
+  static const String languageKey = "languageKey";
+
   /// subtitle
   static const String subtitleEnabledStorageKey = "isSubtitleEnabled";
   static const String subtitleSettingsKey = "subtitleSettingsKey";

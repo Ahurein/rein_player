@@ -5,6 +5,8 @@ import 'package:rein_player/features/playback/controller/video_and_controls_cont
 import 'package:rein_player/features/playback/models/video_bookmark.dart';
 import 'package:rein_player/utils/constants/rp_keys.dart';
 import 'package:rein_player/utils/local_storage/rp_local_storage.dart';
+import 'package:rein_player/utils/localization/locale_keys.dart';
+import 'package:rein_player/utils/localization/tr_args.dart';
 
 class BookmarkController extends GetxController {
   static BookmarkController get to => Get.find();
@@ -35,14 +37,14 @@ class BookmarkController extends GetxController {
 
       if (video == null) {
         RpSnackbar.warning(
-          message: 'No video is currently playing',
+          message: LocaleKeys.noVideoPlaying.tr,
         );
         return;
       }
 
       if (position == null) {
         RpSnackbar.warning(
-          message: 'Unable to get current position',
+          message: LocaleKeys.snackUnableGetPosition.tr,
         );
         return;
       }
@@ -56,7 +58,8 @@ class BookmarkController extends GetxController {
 
       if (existingBookmark != null) {
         RpSnackbar.info(
-          message: 'Bookmark already exists at ${existingBookmark.formattedTimestamp}',
+          message: LocaleKeys.snackBookmarkExists
+              .trArgs([existingBookmark.formattedTimestamp]),
         );
         return;
       }
@@ -75,12 +78,13 @@ class BookmarkController extends GetxController {
       await _saveBookmarksToStorage(video.location);
 
       RpSnackbar.success(
-        title: 'Bookmark Added',
-        message: 'Bookmark saved at ${bookmark.formattedTimestamp}',
+        title: LocaleKeys.snackBookmarkAdded.tr,
+        message:
+            LocaleKeys.snackBookmarkAddedMsg.trArgs([bookmark.formattedTimestamp]),
       );
     } catch (e) {
       RpSnackbar.error(
-        message: 'Failed to add bookmark',
+        message: LocaleKeys.snackFailedAddBookmark.tr,
       );
     }
   }
@@ -99,12 +103,13 @@ class BookmarkController extends GetxController {
       }
 
       RpSnackbar.success(
-        title: 'Bookmark Deleted',
-        message: 'Bookmark at ${bookmark.formattedTimestamp} removed',
+        title: LocaleKeys.snackBookmarkDeleted.tr,
+        message: LocaleKeys.snackBookmarkDeletedMsg
+            .trArgs([bookmark.formattedTimestamp]),
       );
     } catch (e) {
       RpSnackbar.error(
-        message: 'Failed to delete bookmark',
+        message: LocaleKeys.snackFailedDeleteBookmark.tr,
       );
     }
   }
@@ -123,7 +128,7 @@ class BookmarkController extends GetxController {
       }
     } catch (e) {
       RpSnackbar.error(
-        message: 'Failed to update bookmark name',
+        message: LocaleKeys.snackFailedUpdateBookmarkName.tr,
       );
     }
   }
@@ -161,7 +166,7 @@ class BookmarkController extends GetxController {
   Future<void> jumpToNextBookmark() async {
     if (bookmarks.isEmpty) {
       RpSnackbar.info(
-        message: 'No bookmarks available. Press Ctrl+B to add one.',
+        message: LocaleKeys.snackNoBookmarksAvailable.tr,
       );
       return;
     }
@@ -182,11 +187,13 @@ class BookmarkController extends GetxController {
     if (nextBookmark == null) {
       nextBookmark = bookmarks.first;
       RpSnackbar.info(
-        message: 'Jumped to first bookmark: ${nextBookmark.formattedTimestamp}',
+        message: LocaleKeys.snackJumpedFirstBookmark
+            .trArgs([nextBookmark.formattedTimestamp]),
       );
     } else {
       RpSnackbar.info(
-        message: 'Jumped to bookmark: ${nextBookmark.formattedTimestamp}',
+        message: LocaleKeys.snackJumpedBookmark
+            .trArgs([nextBookmark.formattedTimestamp]),
       );
     }
 
@@ -197,7 +204,7 @@ class BookmarkController extends GetxController {
   Future<void> jumpToPreviousBookmark() async {
     if (bookmarks.isEmpty) {
       RpSnackbar.info(
-        message: 'No bookmarks available. Press Ctrl+B to add one.',
+        message: LocaleKeys.snackNoBookmarksAvailable.tr,
       );
       return;
     }
@@ -218,11 +225,13 @@ class BookmarkController extends GetxController {
     if (prevBookmark == null) {
       prevBookmark = bookmarks.last;
       RpSnackbar.info(
-        message: 'Jumped to last bookmark: ${prevBookmark.formattedTimestamp}',
+        message: LocaleKeys.snackJumpedLastBookmark
+            .trArgs([prevBookmark.formattedTimestamp]),
       );
     } else {
       RpSnackbar.info(
-        message: 'Jumped to bookmark: ${prevBookmark.formattedTimestamp}',
+        message: LocaleKeys.snackJumpedBookmark
+            .trArgs([prevBookmark.formattedTimestamp]),
       );
     }
 
@@ -237,7 +246,7 @@ class BookmarkController extends GetxController {
     await _jumpToTimestamp(bookmark.timestamp);
 
     RpSnackbar.info(
-      message: 'Jumped to: ${bookmark.formattedTimestamp}',
+      message: LocaleKeys.snackJumpedToTime.trArgs([bookmark.formattedTimestamp]),
     );
   }
 
@@ -260,12 +269,12 @@ class BookmarkController extends GetxController {
       }
 
       RpSnackbar.success(
-        title: 'Bookmarks Cleared',
-        message: 'All bookmarks removed for this video',
+        title: LocaleKeys.snackBookmarksCleared.tr,
+        message: LocaleKeys.snackBookmarksClearedMsg.tr,
       );
     } catch (e) {
       RpSnackbar.error(
-        message: 'Failed to clear bookmarks',
+        message: LocaleKeys.snackFailedClearBookmarks.tr,
       );
     }
   }

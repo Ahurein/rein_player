@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../utils/constants/rp_colors.dart';
+import '../../../utils/localization/locale_keys.dart';
 
 class RpVideoCollectionSources extends StatelessWidget {
   const RpVideoCollectionSources({
@@ -26,7 +28,7 @@ class RpVideoCollectionSources extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  "Playlist",
+                  LocaleKeys.menuPlaylist.tr,
                   style: Theme.of(context)
                       .textTheme
                       .bodySmall!
