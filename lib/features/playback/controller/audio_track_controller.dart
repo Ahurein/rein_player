@@ -63,7 +63,7 @@ class AudioTrackController extends GetxController {
     }
 
     // Add track ID as fallback
-    parts.add('Track ${track.id}');
+    parts.add(LocaleKeys.audioTrack.trArgsFmt([track.id]));
 
     return parts.join(' - ');
   }

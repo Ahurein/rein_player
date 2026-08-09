@@ -1,5 +1,6 @@
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:rein_player/bindings/general_bindings.dart';
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
@@ -38,7 +39,7 @@ class RpApp extends StatelessWidget {
       return AppLanguage.fromCode(stored[RpKeysConstants.languageKey] as String?)
           .locale;
     }
-    return Get.deviceLocale ?? const Locale('en');
+    return AppLanguage.fromDeviceLocale(Get.deviceLocale).locale;
   }
 
   @override
@@ -52,6 +53,9 @@ class RpApp extends StatelessWidget {
       translations: AppTranslations(),
       locale: _initialLocale(),
       fallbackLocale: const Locale('en'),
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
+      supportedLocales:
+          AppLanguage.values.map((language) => language.locale).toList(),
       home: LayoutBuilder(
         builder: (context, constraints) {
           // Only render app content when window is properly sized

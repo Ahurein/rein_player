@@ -29,4 +29,19 @@ enum AppLanguage {
       orElse: () => AppLanguage.english,
     );
   }
+
+  /// Picks the closest supported language for the given device locale,
+  /// falling back to English when nothing matches.
+  static AppLanguage fromDeviceLocale(Locale? deviceLocale) {
+    if (deviceLocale == null) return AppLanguage.english;
+    for (final language in AppLanguage.values) {
+      if (language.code == deviceLocale.languageCode) return language;
+    }
+    for (final language in AppLanguage.values) {
+      if (language.code.split('_').first == deviceLocale.languageCode) {
+        return language;
+      }
+    }
+    return AppLanguage.english;
+  }
 }

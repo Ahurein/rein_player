@@ -235,7 +235,7 @@ class ABLoopController extends GetxController {
         stopABLoopPlayback();
       }
     } catch (e) {
-      RpSnackbar.error(message: 'Failed to delete segment');
+      RpSnackbar.error(message: LocaleKeys.snackFailedDeleteSegment.tr);
     }
   }
 
