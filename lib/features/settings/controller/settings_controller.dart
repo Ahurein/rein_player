@@ -17,12 +17,14 @@ class SettingsController extends GetxController {
   void onInit() async {
     super.onInit();
 
-    dynamic settingsJson = storage.readData(RpKeysConstants.settingsKey) ?? (Settings()).defaultSettings();
+    final storedSettings = storage.readData(RpKeysConstants.settingsKey);
+    dynamic settingsJson = storedSettings ?? (Settings()).defaultSettings();
     settings = Settings.fromJson(settingsJson);
 
     // Use the stored language when available, otherwise resolve the
     // closest supported device language for the initial launch.
-    if (settingsJson[RpKeysConstants.languageKey] == null) {
+    if (storedSettings == null ||
+        storedSettings[RpKeysConstants.languageKey] == null) {
       settings.language = AppLanguage.fromDeviceLocale(Get.deviceLocale);
     }
     Get.updateLocale(settings.language.locale);
