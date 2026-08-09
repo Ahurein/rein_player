@@ -132,7 +132,7 @@ class EsTranslations {
     LocaleKeys.snackFailedSwitchAudioTrack: 'Error al cambiar la pista de audio: %s',
     LocaleKeys.snackSubtitleLoaded: 'Subtítulos cargados',
     LocaleKeys.snackSubtitleLoadedMsg: 'Archivo de subtítulos cargado correctamente',
-    LocaleKeys.snackSubtitleFormatError: 'Solo se admiten los formatos de subtítulos SRT y VTT',
+    LocaleKeys.snackSubtitleFormatError: 'Solo se admiten los formatos SRT, VTT, ASS y SSA',
     LocaleKeys.snackFillAllFields: 'Rellene todos los campos',
     LocaleKeys.snackAlreadyAdded: 'Ya añadido',
     LocaleKeys.snackAlreadyAddedMsg: 'Este álbum ya está en su lista de reproducción',

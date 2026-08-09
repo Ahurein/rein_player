@@ -132,7 +132,7 @@ class FrTranslations {
     LocaleKeys.snackFailedSwitchAudioTrack: 'Échec du changement de piste audio : %s',
     LocaleKeys.snackSubtitleLoaded: 'Sous-titres chargés',
     LocaleKeys.snackSubtitleLoadedMsg: 'Fichier de sous-titres chargé avec succès',
-    LocaleKeys.snackSubtitleFormatError: 'Seuls les formats SRT et VTT sont pris en charge',
+    LocaleKeys.snackSubtitleFormatError: 'Seuls les formats SRT, VTT, ASS et SSA sont pris en charge',
     LocaleKeys.snackFillAllFields: 'Veuillez remplir tous les champs',
     LocaleKeys.snackAlreadyAdded: 'Déjà ajouté',
     LocaleKeys.snackAlreadyAddedMsg: 'Cet album est déjà dans votre playlist',

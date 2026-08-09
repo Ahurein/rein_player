@@ -132,7 +132,7 @@ class RuTranslations {
     LocaleKeys.snackFailedSwitchAudioTrack: 'Не удалось переключить аудиодорожку: %s',
     LocaleKeys.snackSubtitleLoaded: 'Субтитры загружены',
     LocaleKeys.snackSubtitleLoadedMsg: 'Файл субтитров успешно загружен',
-    LocaleKeys.snackSubtitleFormatError: 'Поддерживаются только форматы субтитров SRT и VTT',
+    LocaleKeys.snackSubtitleFormatError: 'Поддерживаются только форматы субтитров SRT, VTT, ASS и SSA',
     LocaleKeys.snackFillAllFields: 'Пожалуйста, заполните все поля',
     LocaleKeys.snackAlreadyAdded: 'Уже добавлено',
     LocaleKeys.snackAlreadyAddedMsg: 'Этот альбом уже есть в вашем плейлисте',

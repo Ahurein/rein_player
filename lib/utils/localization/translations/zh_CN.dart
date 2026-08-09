@@ -132,7 +132,7 @@ class ZhCnTranslations {
     LocaleKeys.snackFailedSwitchAudioTrack: '切换音轨失败：%s',
     LocaleKeys.snackSubtitleLoaded: '字幕已加载',
     LocaleKeys.snackSubtitleLoadedMsg: '字幕文件加载成功',
-    LocaleKeys.snackSubtitleFormatError: '仅支持 SRT 和 VTT 字幕格式',
+    LocaleKeys.snackSubtitleFormatError: '仅支持 SRT、VTT、ASS 和 SSA 字幕格式',
     LocaleKeys.snackFillAllFields: '请填写所有字段',
     LocaleKeys.snackAlreadyAdded: '已添加',
     LocaleKeys.snackAlreadyAddedMsg: '该专辑已在您的播放列表中',

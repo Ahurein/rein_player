@@ -136,7 +136,7 @@ class EnTranslations {
     LocaleKeys.snackSubtitleLoaded: 'Subtitle Loaded',
     LocaleKeys.snackSubtitleLoadedMsg: 'Subtitle file loaded successfully',
     LocaleKeys.snackSubtitleFormatError:
-        'Only SRT and VTT subtitle formats are supported',
+        'Only SRT, VTT, ASS and SSA subtitle formats are supported',
     LocaleKeys.snackFillAllFields: 'Please fill in all fields',
     LocaleKeys.snackAlreadyAdded: 'Already Added',
     LocaleKeys.snackAlreadyAddedMsg: 'This album is already in your playlist',

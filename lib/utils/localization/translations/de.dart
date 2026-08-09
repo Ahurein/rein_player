@@ -132,7 +132,7 @@ class DeTranslations {
     LocaleKeys.snackFailedSwitchAudioTrack: 'Wechseln der Audiospur fehlgeschlagen: %s',
     LocaleKeys.snackSubtitleLoaded: 'Untertitel geladen',
     LocaleKeys.snackSubtitleLoadedMsg: 'Untertiteldatei erfolgreich geladen',
-    LocaleKeys.snackSubtitleFormatError: 'Es werden nur SRT- und VTT-Untertitelformate unterstützt',
+    LocaleKeys.snackSubtitleFormatError: 'Es werden nur die SRT-, VTT-, ASS- und SSA-Untertitelformate unterstützt',
     LocaleKeys.snackFillAllFields: 'Bitte füllen Sie alle Felder aus',
     LocaleKeys.snackAlreadyAdded: 'Bereits hinzugefügt',
     LocaleKeys.snackAlreadyAddedMsg: 'Dieses Album befindet sich bereits in Ihrer Wiedergabeliste',

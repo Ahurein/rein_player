@@ -132,7 +132,7 @@ class KoTranslations {
     LocaleKeys.snackFailedSwitchAudioTrack: '오디오 트랙 전환 실패: %s',
     LocaleKeys.snackSubtitleLoaded: '자막 로드됨',
     LocaleKeys.snackSubtitleLoadedMsg: '자막 파일을 성공적으로 로드했습니다',
-    LocaleKeys.snackSubtitleFormatError: 'SRT 및 VTT 자막 형식만 지원됩니다',
+    LocaleKeys.snackSubtitleFormatError: 'SRT, VTT, ASS 및 SSA 자막 형식만 지원됩니다',
     LocaleKeys.snackFillAllFields: '모든 항목을 입력해 주세요',
     LocaleKeys.snackAlreadyAdded: '이미 추가됨',
     LocaleKeys.snackAlreadyAddedMsg: '이 앨범은 이미 재생 목록에 있습니다',

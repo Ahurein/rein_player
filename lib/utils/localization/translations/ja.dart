@@ -132,7 +132,7 @@ class JaTranslations {
     LocaleKeys.snackFailedSwitchAudioTrack: '音声トラックの切り替えに失敗: %s',
     LocaleKeys.snackSubtitleLoaded: '字幕を読み込みました',
     LocaleKeys.snackSubtitleLoadedMsg: '字幕ファイルの読み込みに成功しました',
-    LocaleKeys.snackSubtitleFormatError: 'SRT と VTT の字幕形式のみサポートされています',
+    LocaleKeys.snackSubtitleFormatError: 'SRT、VTT、ASS、SSA の字幕形式のみサポートされています',
     LocaleKeys.snackFillAllFields: 'すべての項目を入力してください',
     LocaleKeys.snackAlreadyAdded: '追加済み',
     LocaleKeys.snackAlreadyAddedMsg: 'このアルバムは既にプレイリストにあります',
