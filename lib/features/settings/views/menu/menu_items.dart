@@ -21,38 +21,41 @@ import 'package:rein_player/features/settings/views/subtitle_settings_modal.dart
 import 'package:rein_player/features/settings/views/seek_settings_modal.dart';
 import 'package:rein_player/utils/constants/rp_enums.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
+import 'package:rein_player/utils/localization/app_languages.dart';
+import 'package:rein_player/utils/localization/locale_keys.dart';
 
 List<RpMenuItem> get defaultMenuData {
   final currentType = PlaylistTypeController.to.playlistType.value;
   final availableAudioTracks = AudioTrackController.to.availableAudioTracks;
   final currentAudioTrack = AudioTrackController.to.currentAudioTrack.value;
+  final currentLanguage = SettingsController.to.settings.language;
 
   return [
     /// Open file
     RpMenuItem(
-      text: "Open File",
+      text: LocaleKeys.menuOpenFile.tr,
       icon: Icons.file_open,
       onTap: ControlsController.to.open,
     ),
 
     /// Subtitles
     RpMenuItem(
-      text: "Subtitles",
+      text: LocaleKeys.menuSubtitles.tr,
       icon: Icons.subtitles,
       subMenuItems: [
         RpMenuItem(
           icon: Icons.add,
-          text: "Add Subtitle",
+          text: LocaleKeys.menuAddSubtitle.tr,
           onTap: SubtitleController.to.loadSubtitle,
         ),
         RpMenuItem(
           icon: Icons.remove,
-          text: "Disable Subtitle",
+          text: LocaleKeys.menuDisableSubtitle.tr,
           onTap: SubtitleController.to.disableSubtitle,
         ),
         RpMenuItem(
           icon: Icons.settings,
-          text: "Subtitle Settings",
+          text: LocaleKeys.menuSubtitleSettings.tr,
           onTap: () {
             Get.dialog(const SubtitleSettingsModal());
           },
@@ -62,7 +65,7 @@ List<RpMenuItem> get defaultMenuData {
 
     /// Audio
     RpMenuItem(
-      text: "Audio",
+      text: LocaleKeys.menuAudio.tr,
       icon: Icons.audiotrack,
       subMenuItems:
           _buildAudioTrackMenu(availableAudioTracks, currentAudioTrack),
@@ -70,18 +73,18 @@ List<RpMenuItem> get defaultMenuData {
 
     // Preferences submenu
     RpMenuItem(
-      text: "Preferences",
+      text: LocaleKeys.menuPreferences.tr,
       icon: Icons.settings,
       subMenuItems: [
         RpMenuItem(
           icon: Icons.keyboard,
-          text: "Keyboard Bindings",
+          text: LocaleKeys.menuKeyboardBindings.tr,
           onTap: () {
             Get.dialog(const KeyboardBindingsModal());
           },
         ),
         RpMenuItem(
-          text: "Double-Click Action",
+          text: LocaleKeys.menuDoubleClickAction.tr,
           icon: Icons.mouse,
           subMenuItems: [
             RpMenuItem(
@@ -89,7 +92,7 @@ List<RpMenuItem> get defaultMenuData {
                     DoubleClickAction.toggleWindowSize
                   ? Icons.check
                   : null,
-              text: "Maximize/Minimize Window",
+              text: LocaleKeys.menuMaximizeMinimizeWindow.tr,
               onTap: () async {
                 await SettingsController.to.updateDoubleClickAction(
                   DoubleClickAction.toggleWindowSize,
@@ -101,7 +104,7 @@ List<RpMenuItem> get defaultMenuData {
                     DoubleClickAction.playPause
                   ? Icons.check
                   : null,
-              text: "Play/Pause Video",
+              text: LocaleKeys.menuPlayPauseVideo.tr,
               onTap: () async {
                 await SettingsController.to.updateDoubleClickAction(
                   DoubleClickAction.playPause,
@@ -111,8 +114,22 @@ List<RpMenuItem> get defaultMenuData {
           ],
         ),
         RpMenuItem(
+          text: LocaleKeys.menuLanguage.tr,
+          icon: Icons.language,
+          subMenuItems: [
+            for (final language in AppLanguage.values)
+              RpMenuItem(
+                icon: currentLanguage == language ? Icons.check : null,
+                text: language.displayName,
+                onTap: () async {
+                  await SettingsController.to.updateLanguage(language);
+                },
+              ),
+          ],
+        ),
+        RpMenuItem(
           icon: Icons.fast_forward,
-          text: "Seek Intervals",
+          text: LocaleKeys.menuSeekIntervals.tr,
           onTap: () {
             final context = Get.context;
             if (context != null) {
@@ -121,7 +138,7 @@ List<RpMenuItem> get defaultMenuData {
           },
         ),
         RpMenuItem(
-          text: "When Playlist Ends",
+          text: LocaleKeys.menuWhenPlaylistEnds.tr,
           icon: Icons.playlist_remove,
           subMenuItems: [
             RpMenuItem(
@@ -129,14 +146,14 @@ List<RpMenuItem> get defaultMenuData {
                     PlaylistEndBehavior.showHomeScreen
                   ? Icons.check
                   : null,
-              text: "Show Home Screen",
+              text: LocaleKeys.menuShowHomeScreen.tr,
               onTap: () async {
                 await SettingsController.to.updatePlaylistEndBehavior(
                   PlaylistEndBehavior.showHomeScreen,
                 );
                 RpSnackbar.success(
-                  title: 'Playlist End Behavior Updated',
-                  message: 'Will show home screen when playlist ends',
+                  title: LocaleKeys.snackPlaylistEndBehaviorUpdated.tr,
+                  message: LocaleKeys.snackPlaylistEndHomeMsg.tr,
                 );
               },
             ),
@@ -145,14 +162,14 @@ List<RpMenuItem> get defaultMenuData {
                     PlaylistEndBehavior.shutdown
                   ? Icons.check
                   : null,
-              text: "Shutdown Application",
+              text: LocaleKeys.menuShutdownApplication.tr,
               onTap: () async {
                 await SettingsController.to.updatePlaylistEndBehavior(
                   PlaylistEndBehavior.shutdown,
                 );
                 RpSnackbar.success(
-                  title: 'Playlist End Behavior Updated',
-                  message: 'Will shutdown when playlist ends',
+                  title: LocaleKeys.snackPlaylistEndBehaviorUpdated.tr,
+                  message: LocaleKeys.snackPlaylistEndShutdownMsg.tr,
                 );
               },
             ),
@@ -163,19 +180,19 @@ List<RpMenuItem> get defaultMenuData {
 
     /// Playlist
     RpMenuItem(
-      text: "Playlist",
+      text: LocaleKeys.menuPlaylist.tr,
       icon: Icons.playlist_play,
       subMenuItems: [
         /// Playlist Type submenu
         RpMenuItem(
-          text: "Playlist Type",
+          text: LocaleKeys.menuPlaylistType.tr,
           icon: Icons.featured_play_list,
           subMenuItems: [
             RpMenuItem(
               icon: currentType == PlaylistType.defaultPlaylistType
                   ? Icons.check
                   : null,
-              text: "Default",
+              text: LocaleKeys.menuDefault.tr,
               onTap: () => PlaylistTypeController.to
                   .changePlaylistType(PlaylistType.defaultPlaylistType),
             ),
@@ -183,7 +200,7 @@ List<RpMenuItem> get defaultMenuData {
               icon: currentType == PlaylistType.potPlayerPlaylistType
                   ? Icons.check
                   : null,
-              text: "Pot Player",
+              text: LocaleKeys.menuPotPlayer.tr,
               onTap: () => PlaylistTypeController.to
                   .changePlaylistType(PlaylistType.potPlayerPlaylistType),
             ),
@@ -193,19 +210,19 @@ List<RpMenuItem> get defaultMenuData {
         /// Shuffle Playlist
         RpMenuItem(
           icon: Icons.shuffle,
-          text: "Shuffle Playlist",
+          text: LocaleKeys.menuShufflePlaylist.tr,
           onTap: () {
             Get.find<AlbumContentController>().shufflePlaylistContent();
             RpSnackbar.success(
-              title: 'Playlist Shuffled',
-              message: 'Playlist order has been randomized',
+              title: LocaleKeys.snackPlaylistShuffled.tr,
+              message: LocaleKeys.snackPlaylistShuffledMsg.tr,
             );
           },
         ),
 
         /// Playlist Load Behavior submenu
         RpMenuItem(
-          text: "When Loading Files",
+          text: LocaleKeys.menuWhenLoadingFiles.tr,
           icon: Icons.playlist_add,
           subMenuItems: [
             RpMenuItem(
@@ -213,14 +230,14 @@ List<RpMenuItem> get defaultMenuData {
                     PlaylistLoadBehavior.clearAndReplace
                   ? Icons.check
                   : null,
-              text: "Clear and Replace Playlist",
+              text: LocaleKeys.menuClearAndReplacePlaylist.tr,
               onTap: () async {
                 await SettingsController.to.updatePlaylistLoadBehavior(
                   PlaylistLoadBehavior.clearAndReplace,
                 );
                 RpSnackbar.success(
-                  title: 'Playlist Behavior Updated',
-                  message: 'New files will clear the playlist',
+                  title: LocaleKeys.snackPlaylistBehaviorUpdated.tr,
+                  message: LocaleKeys.snackPlaylistLoadClearMsg.tr,
                 );
               },
             ),
@@ -229,14 +246,14 @@ List<RpMenuItem> get defaultMenuData {
                     PlaylistLoadBehavior.appendToExisting
                   ? Icons.check
                   : null,
-              text: "Append to Existing Playlist",
+              text: LocaleKeys.menuAppendToExistingPlaylist.tr,
               onTap: () async {
                 await SettingsController.to.updatePlaylistLoadBehavior(
                   PlaylistLoadBehavior.appendToExisting,
                 );
                 RpSnackbar.success(
-                  title: 'Playlist Behavior Updated',
-                  message: 'New files will be added to playlist',
+                  title: LocaleKeys.snackPlaylistBehaviorUpdated.tr,
+                  message: LocaleKeys.snackPlaylistLoadAppendMsg.tr,
                 );
               },
             ),
@@ -247,40 +264,40 @@ List<RpMenuItem> get defaultMenuData {
 
     /// Bookmarks
     RpMenuItem(
-      text: "Bookmarks",
+      text: LocaleKeys.menuBookmarks.tr,
       icon: Icons.bookmark,
       subMenuItems: [
         RpMenuItem(
           icon: Icons.bookmark_add,
-          text: "Add Bookmark",
+          text: LocaleKeys.menuAddBookmark.tr,
           onTap: () async {
             await BookmarkController.to.addBookmark();
           },
         ),
         RpMenuItem(
           icon: Icons.bookmark_border,
-          text: "Show Bookmarks",
+          text: LocaleKeys.menuShowBookmarks.tr,
           onTap: () {
             BookmarkController.to.toggleBookmarkOverlay();
           },
         ),
         RpMenuItem(
           icon: Icons.skip_next,
-          text: "Next Bookmark",
+          text: LocaleKeys.menuNextBookmark.tr,
           onTap: () async {
             await BookmarkController.to.jumpToNextBookmark();
           },
         ),
         RpMenuItem(
           icon: Icons.skip_previous,
-          text: "Previous Bookmark",
+          text: LocaleKeys.menuPreviousBookmark.tr,
           onTap: () async {
             await BookmarkController.to.jumpToPreviousBookmark();
           },
         ),
         RpMenuItem(
           icon: Icons.clear_all,
-          text: "Clear All Bookmarks",
+          text: LocaleKeys.menuClearAllBookmarks.tr,
           onTap: () {
             final video = VideoAndControlController.to.currentVideo.value;
             if (video != null) {
@@ -289,18 +306,18 @@ List<RpMenuItem> get defaultMenuData {
                 Builder(
                   builder: (context) => AlertDialog(
                     backgroundColor: RpColors.gray_900,
-                    title: const Text(
-                      'Clear All Bookmarks?',
-                      style: TextStyle(color: RpColors.white),
+                    title: Text(
+                      LocaleKeys.dialogClearAllBookmarksTitle.tr,
+                      style: const TextStyle(color: RpColors.white),
                     ),
-                    content: const Text(
-                      'This will remove all bookmarks for this video. This action cannot be undone.',
-                      style: TextStyle(color: RpColors.white_300),
+                    content: Text(
+                      LocaleKeys.dialogClearAllBookmarksMessage.tr,
+                      style: const TextStyle(color: RpColors.white_300),
                     ),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.of(context).pop(),
-                        child: const Text('Cancel'),
+                        child: Text(LocaleKeys.cancel.tr),
                       ),
                       TextButton(
                         onPressed: () {
@@ -308,9 +325,9 @@ List<RpMenuItem> get defaultMenuData {
                               .clearBookmarksForVideo(video.location);
                           Navigator.of(context).pop();
                         },
-                        child: const Text(
-                          'Clear All',
-                          style: TextStyle(color: RpColors.red),
+                        child: Text(
+                          LocaleKeys.clearAll.tr,
+                          style: const TextStyle(color: RpColors.red),
                         ),
                       ),
                     ],
@@ -318,7 +335,7 @@ List<RpMenuItem> get defaultMenuData {
                 ),
               );
             } else {
-              RpSnackbar.warning(message: 'No video is currently playing');
+              RpSnackbar.warning(message: LocaleKeys.noVideoPlaying.tr);
             }
           },
         ),
@@ -327,47 +344,47 @@ List<RpMenuItem> get defaultMenuData {
 
     /// A-B Loop Segments
     RpMenuItem(
-      text: "A-B Loop Segments",
+      text: LocaleKeys.menuAbLoopSegments.tr,
       icon: Icons.repeat,
       subMenuItems: [
         RpMenuItem(
           icon: Icons.add,
-          text: "Add Segment at Current Position",
+          text: LocaleKeys.menuAddSegmentAtCurrentPosition.tr,
           onTap: () async {
             ABLoopController.to.addSegmentAtCurrentPosition();
           },
         ),
         RpMenuItem(
           icon: Icons.list,
-          text: "Show Segments",
+          text: LocaleKeys.menuShowSegments.tr,
           onTap: () {
             ABLoopController.to.toggleOverlay();
           },
         ),
         RpMenuItem(
           icon: Icons.play_circle,
-          text: "Start/Stop A-B Loop Playback",
+          text: LocaleKeys.menuStartStopABLoopPlayback.tr,
           onTap: () {
             ABLoopController.to.toggleABLoopPlayback();
           },
         ),
         RpMenuItem(
           icon: Icons.skip_next,
-          text: "Next Segment",
+          text: LocaleKeys.menuNextSegment.tr,
           onTap: () async {
             await ABLoopController.to.jumpToNextSegment();
           },
         ),
         RpMenuItem(
           icon: Icons.skip_previous,
-          text: "Previous Segment",
+          text: LocaleKeys.menuPreviousSegment.tr,
           onTap: () async {
             await ABLoopController.to.jumpToPreviousSegment();
           },
         ),
         RpMenuItem(
           icon: Icons.file_upload,
-          text: "Import PBF File...",
+          text: LocaleKeys.menuImportPBF.tr,
           onTap: () async {
             final result = await FilePicker.platform.pickFiles(
               type: FileType.custom,
@@ -380,18 +397,18 @@ List<RpMenuItem> get defaultMenuData {
         ),
         RpMenuItem(
           icon: Icons.file_download,
-          text: "Export to PBF File...",
+          text: LocaleKeys.menuExportPBF.tr,
           onTap: () async {
             await ABLoopController.to.exportToPBF();
           },
         ),
         RpMenuItem(
           icon: Icons.clear_all,
-          text: "Clear All Segments",
+          text: LocaleKeys.menuClearAllSegments.tr,
           onTap: () {
             final segments = ABLoopController.to.segments;
             if (segments.isEmpty) {
-              RpSnackbar.info(message: 'No segments to clear');
+              RpSnackbar.info(message: LocaleKeys.noSegmentsToClear.tr);
               return;
             }
 
@@ -400,27 +417,27 @@ List<RpMenuItem> get defaultMenuData {
               Builder(
                 builder: (context) => AlertDialog(
                   backgroundColor: RpColors.gray_900,
-                  title: const Text(
-                    'Clear All Segments?',
-                    style: TextStyle(color: RpColors.white),
+                  title: Text(
+                    LocaleKeys.dialogClearAllSegmentsTitle.tr,
+                    style: const TextStyle(color: RpColors.white),
                   ),
-                  content: const Text(
-                    'This will remove all A-B loop segments for this video. This action cannot be undone.',
-                    style: TextStyle(color: RpColors.white_300),
+                  content: Text(
+                    LocaleKeys.dialogClearAllSegmentsMessage.tr,
+                    style: const TextStyle(color: RpColors.white_300),
                   ),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(),
-                      child: const Text('Cancel'),
+                      child: Text(LocaleKeys.cancel.tr),
                     ),
                     TextButton(
                       onPressed: () {
                         ABLoopController.to.clearSegments();
                         Navigator.of(context).pop();
                       },
-                      child: const Text(
-                        'Clear All',
-                        style: TextStyle(color: RpColors.red),
+                      child: Text(
+                        LocaleKeys.clearAll.tr,
+                        style: const TextStyle(color: RpColors.red),
                       ),
                     ),
                   ],
@@ -434,7 +451,7 @@ List<RpMenuItem> get defaultMenuData {
 
     /// About
     RpMenuItem(
-      text: "About",
+      text: LocaleKeys.menuAbout.tr,
       icon: Icons.info_outline,
       onTap: () {
         Get.dialog(const RpAboutDialog());
@@ -443,7 +460,7 @@ List<RpMenuItem> get defaultMenuData {
 
     /// Exit
     RpMenuItem(
-      text: "Exit",
+      text: LocaleKeys.menuExit.tr,
       icon: Icons.exit_to_app,
       onTap: () {
         WindowActionsController.to.closeWindow();
@@ -460,7 +477,7 @@ List<RpMenuItem> _buildAudioTrackMenu(
     audioMenuItems.add(
       RpMenuItem(
         icon: null,
-        text: "No additional tracks available",
+        text: LocaleKeys.menuNoAdditionalTracks.tr,
         enabled: false,
         onTap: () {},
       ),

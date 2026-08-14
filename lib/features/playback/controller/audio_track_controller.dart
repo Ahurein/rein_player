@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:rein_player/common/widgets/rp_snackbar.dart';
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
+import 'package:rein_player/utils/localization/locale_keys.dart';
+import 'package:rein_player/utils/localization/tr_args.dart';
 
 class AudioTrackController extends GetxController {
   static AudioTrackController get to => Get.find();
@@ -38,12 +40,13 @@ class AudioTrackController extends GetxController {
       await player.setAudioTrack(track);
       currentAudioTrack.value = track;
       RpSnackbar.success(
-        title: 'Audio Track Changed',
-        message: 'Switched to ${getAudioTrackDisplayName(track)}',
+        title: LocaleKeys.snackAudioTrackChanged.tr,
+        message: LocaleKeys.snackAudioTrackChangedMsg
+            .trArgsFmt([getAudioTrackDisplayName(track)]),
       );
     } catch (e) {
       RpSnackbar.error(
-        message: 'Failed to switch audio track: $e',
+        message: LocaleKeys.snackFailedSwitchAudioTrack.trArgsFmt([e.toString()]),
       );
     }
   }
@@ -60,7 +63,7 @@ class AudioTrackController extends GetxController {
     }
 
     // Add track ID as fallback
-    parts.add('Track ${track.id}');
+    parts.add(LocaleKeys.audioTrack.trArgsFmt([track.id]));
 
     return parts.join(' - ');
   }

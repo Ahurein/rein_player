@@ -9,6 +9,7 @@ import 'package:rein_player/features/playback/controller/video_and_controls_cont
 import 'package:rein_player/features/settings/controller/settings_controller.dart';
 import 'package:rein_player/utils/constants/rp_keys.dart';
 import 'package:rein_player/utils/local_storage/rp_local_storage.dart';
+import 'package:rein_player/utils/localization/locale_keys.dart';
 
 import '../../settings/models/settings.dart';
 
@@ -55,12 +56,12 @@ class SubtitleController extends GetxController {
         isSubtitleEnabled.value = true;
         await player.setSubtitleTrack(SubtitleTrack.data(content));
         RpSnackbar.success(
-          title: 'Subtitle Loaded',
-          message: 'Subtitle file loaded successfully',
+          title: LocaleKeys.snackSubtitleLoaded.tr,
+          message: LocaleKeys.snackSubtitleLoadedMsg.tr,
         );
       } else {
         RpSnackbar.error(
-          message: 'Only SRT, VTT, ASS and SSA subtitle formats are supported',
+          message: LocaleKeys.snackSubtitleFormatError.tr,
         );
       }
     }

@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:rein_player/features/settings/models/settings.dart';
 import 'package:rein_player/utils/constants/rp_enums.dart';
 import 'package:rein_player/utils/local_storage/rp_local_storage.dart';
+import 'package:rein_player/utils/localization/app_languages.dart';
 
 import '../../../utils/constants/rp_keys.dart';
 
@@ -16,8 +17,24 @@ class SettingsController extends GetxController {
   void onInit() async {
     super.onInit();
 
-    dynamic settingsJson = storage.readData(RpKeysConstants.settingsKey) ?? (Settings()).defaultSettings();
+    final storedSettings = storage.readData(RpKeysConstants.settingsKey);
+    dynamic settingsJson = storedSettings ?? (Settings()).defaultSettings();
     settings = Settings.fromJson(settingsJson);
+
+    // Use the stored language when available, otherwise resolve the
+    // closest supported device language for the initial launch.
+    if (storedSettings == null ||
+        storedSettings[RpKeysConstants.languageKey] == null) {
+      settings.language = AppLanguage.fromDeviceLocale(Get.deviceLocale);
+    }
+    Get.updateLocale(settings.language.locale);
+  }
+
+  Future<void> updateLanguage(AppLanguage language) async {
+    settings.language = language;
+    await storage.saveData(RpKeysConstants.settingsKey, settings.toJson());
+    Get.updateLocale(language.locale);
+    update();
   }
 
   Future<void> updateDoubleClickAction(DoubleClickAction action) async {

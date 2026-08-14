@@ -11,6 +11,8 @@ import 'package:rein_player/features/playlist/controller/playlist_controller.dar
 import 'package:rein_player/features/playlist/models/playlist_item.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
 import 'package:rein_player/utils/device/rp_device_utils.dart';
+import 'package:rein_player/utils/localization/locale_keys.dart';
+import 'package:rein_player/utils/localization/tr_args.dart';
 
 import '../controller/album_content_controller.dart';
 
@@ -72,7 +74,7 @@ class RpAlbumItems extends StatelessWidget {
     return ContextMenu(
       entries: <ContextMenuEntry>[
         MenuItem(
-          label: 'Play',
+          label: LocaleKeys.albumPlay.tr,
           icon: Icons.play_arrow,
           onSelected: () async {
             await AlbumContentController.to.playItem(media);
@@ -80,23 +82,24 @@ class RpAlbumItems extends StatelessWidget {
         ),
         const MenuDivider(),
         MenuItem(
-          label:
-              RpDeviceUtils.isMacOS() ? 'Show in Finder' : 'Show in Explorer',
+          label: RpDeviceUtils.isMacOS()
+              ? LocaleKeys.albumShowInFinder.tr
+              : LocaleKeys.albumShowInExplorer.tr,
           icon: Icons.folder_open,
           onSelected: () {
             AlbumContentController.to.showInFileExplorer(media.location);
           },
         ),
         MenuItem(
-          label: 'Copy File Path',
+          label: LocaleKeys.albumCopyFilePath.tr,
           icon: Icons.copy,
           onSelected: () {
             Clipboard.setData(ClipboardData(text: media.location));
-            RpSnackbar.copied(item: 'File path');
+            RpSnackbar.copied(item: LocaleKeys.albumFilePath.tr);
           },
         ),
         MenuItem(
-          label: 'File Properties',
+          label: LocaleKeys.albumFileProperties.tr,
           icon: Icons.info_outline,
           onSelected: () async {
             await _showFileProperties(context, media);
@@ -104,23 +107,22 @@ class RpAlbumItems extends StatelessWidget {
         ),
         const MenuDivider(),
         MenuItem(
-          label: 'Remove from Playlist',
+          label: LocaleKeys.albumRemoveFromPlaylist.tr,
           icon: Icons.playlist_remove,
           onSelected: () {
             AlbumContentController.to.removeItemFromPlaylist(media);
           },
         ),
         MenuItem(
-          label: 'Delete from Disk',
+          label: LocaleKeys.albumDeleteFromDisk.tr,
           icon: Icons.delete_forever,
           onSelected: () async {
             // Show confirmation dialog
             final confirmed = await RpDialog.showConfirmation(
               context: context,
-              title: 'Delete File',
-              message:
-                  'Are you sure you want to permanently delete "${media.name}" from disk?',
-              confirmText: 'Delete',
+              title: LocaleKeys.dialogDeleteFileTitle.tr,
+              message: LocaleKeys.dialogDeleteFileMessage.trArgsFmt([media.name]),
+              confirmText: LocaleKeys.delete.tr,
               confirmColor: Colors.red,
               titleIcon: const Icon(Icons.delete_forever, color: Colors.red),
             );
@@ -141,13 +143,13 @@ class RpAlbumItems extends StatelessWidget {
               }
 
               if (!success) {
-                RpSnackbar.error(message: 'Failed to delete file');
+                RpSnackbar.error(message: LocaleKeys.snackFailedDeleteFile.tr);
               } else {
                 RpSnackbar.success(
-                  title: 'Deleted',
+                  title: LocaleKeys.snackDeleted.tr,
                   message: isCurrentlyPlaying
-                      ? 'File deleted and skipped to next'
-                      : 'File deleted successfully',
+                      ? LocaleKeys.snackDeletedAndSkipped.tr
+                      : LocaleKeys.snackDeletedSuccessfully.tr,
                 );
               }
             }
@@ -176,21 +178,24 @@ class RpAlbumItems extends StatelessWidget {
 
     return RpDialog.showInfo(
       context: context,
-      title: 'File Properties',
+      title: LocaleKeys.albumFileProperties.tr,
       titleIcon: const Icon(Icons.info_outline, color: RpColors.accent),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildPropertyRow('Name:', properties['name']),
+          _buildPropertyRow(LocaleKeys.albumName.tr, properties['name']),
           const SizedBox(height: 8),
-          _buildPropertyRow('Format:', properties['format']),
+          _buildPropertyRow(LocaleKeys.albumFormat.tr, properties['format']),
           const SizedBox(height: 8),
-          _buildPropertyRow('Size:', properties['size']),
+          _buildPropertyRow(LocaleKeys.albumSize.tr, properties['size']),
           const SizedBox(height: 8),
-          _buildPropertyRow('Modified:', properties['modified']),
+          _buildPropertyRow(LocaleKeys.albumModified.tr,
+              properties['modified']),
           const SizedBox(height: 8),
-          _buildPropertyRow('Location:', properties['directory'], isPath: true),
+          _buildPropertyRow(
+              LocaleKeys.albumLocation.tr, properties['directory'],
+              isPath: true),
         ],
       ),
     );
@@ -210,7 +215,7 @@ class RpAlbumItems extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         Text(
-          value ?? 'N/A',
+          value ?? LocaleKeys.albumNa.tr,
           style: const TextStyle(
             color: RpColors.black_300,
             fontSize: 12,

@@ -6,6 +6,8 @@ import 'package:rein_player/common/widgets/rp_snackbar.dart';
 import 'package:rein_player/features/settings/controller/seek_settings_controller.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
 import 'package:rein_player/utils/constants/rp_enums.dart';
+import 'package:rein_player/utils/localization/locale_keys.dart';
+import 'package:rein_player/utils/localization/tr_args.dart';
 
 /// Seek settings modal
 class SeekSettingsModal extends StatelessWidget {
@@ -14,7 +16,7 @@ class SeekSettingsModal extends StatelessWidget {
   static Future<void> show(BuildContext context) {
     return RpDialog.show(
       context: context,
-      title: 'Seek Interval Settings',
+      title: LocaleKeys.seekTitle.tr,
       titleIcon: const Icon(Icons.fast_forward, color: RpColors.accent),
       maxWidth: 550,
       content: const _SeekSettingsContent(),
@@ -23,14 +25,14 @@ class SeekSettingsModal extends StatelessWidget {
           onPressed: () async {
             await SeekSettingsController.to.resetToDefaults();
             RpSnackbar.success(
-              title: 'Reset',
-              message: 'Seek settings reset to defaults',
+              title: LocaleKeys.seekResetToDefaults.tr,
+              message: LocaleKeys.seekResetMsg.tr,
             );
           },
           icon: const Icon(Icons.restore, size: 16),
-          label: const Text(
-            'Reset to Defaults',
-            style: TextStyle(fontSize: 12),
+          label: Text(
+            LocaleKeys.seekResetToDefaults.tr,
+            style: const TextStyle(fontSize: 12),
           ),
           style: ElevatedButton.styleFrom(
             backgroundColor: RpColors.black_600,
@@ -40,9 +42,9 @@ class SeekSettingsModal extends StatelessWidget {
         const SizedBox(width: 8),
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text(
-            'Close',
-            style: TextStyle(color: RpColors.accent, fontSize: 12),
+          child: Text(
+            LocaleKeys.close.tr,
+            style: const TextStyle(color: RpColors.accent, fontSize: 12),
           ),
         ),
       ],
@@ -67,7 +69,7 @@ class _SeekSettingsContent extends StatelessWidget {
       children: [
         // Mode Selection
         Text(
-          'Seek Mode',
+          LocaleKeys.seekSeekMode.tr,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 color: RpColors.white,
                 fontSize: 14,
@@ -80,7 +82,7 @@ class _SeekSettingsContent extends StatelessWidget {
 
         // Regular Seek Configuration
         Text(
-          'Regular Seek',
+          LocaleKeys.seekRegularSeek.tr,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 color: RpColors.white,
                 fontSize: 14,
@@ -93,7 +95,7 @@ class _SeekSettingsContent extends StatelessWidget {
 
         // Big Seek Configuration
         Text(
-          'Big Seek',
+          LocaleKeys.seekBigSeek.tr,
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 color: RpColors.white,
                 fontSize: 14,
@@ -118,13 +120,13 @@ class _ModeSelector extends StatelessWidget {
     return Obx(() => Column(
           children: [
             RadioListTile<SeekMode>(
-              title: const Text(
-                'Adaptive (Percentage-based)',
-                style: TextStyle(color: RpColors.white, fontSize: 13),
+              title: Text(
+                LocaleKeys.seekAdaptive.tr,
+                style: const TextStyle(color: RpColors.white, fontSize: 13),
               ),
-              subtitle: const Text(
-                'Seek based on video duration (e.g., 1% or 5%)',
-                style: TextStyle(color: RpColors.white_300, fontSize: 11),
+              subtitle: Text(
+                LocaleKeys.seekAdaptiveDesc.tr,
+                style: const TextStyle(color: RpColors.white_300, fontSize: 11),
               ),
               value: SeekMode.adaptive,
               groupValue: controller.settings.value.mode,
@@ -136,13 +138,13 @@ class _ModeSelector extends StatelessWidget {
               },
             ),
             RadioListTile<SeekMode>(
-              title: const Text(
-                'Fixed (Seconds-based)',
-                style: TextStyle(color: RpColors.white, fontSize: 13),
+              title: Text(
+                LocaleKeys.seekFixed.tr,
+                style: const TextStyle(color: RpColors.white, fontSize: 13),
               ),
-              subtitle: const Text(
-                'Seek fixed number of seconds (e.g., 5s or 30s)',
-                style: TextStyle(color: RpColors.white_300, fontSize: 11),
+              subtitle: Text(
+                LocaleKeys.seekFixedDesc.tr,
+                style: const TextStyle(color: RpColors.white_300, fontSize: 11),
               ),
               value: SeekMode.fixed,
               groupValue: controller.settings.value.mode,
@@ -205,9 +207,9 @@ class _RegularSeekConfig extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Range: 0.5% - 10%',
-              style: TextStyle(color: RpColors.white_300, fontSize: 11),
+            Text(
+              LocaleKeys.seekRangePercentSmall.tr,
+              style: const TextStyle(color: RpColors.white_300, fontSize: 11),
             ),
           ],
         );
@@ -275,7 +277,7 @@ class _BigSeekConfig extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Range: 1% - 20%',
+              LocaleKeys.seekRangePercentBig.tr,
               style: const TextStyle(color: RpColors.white_300, fontSize: 11),
             ),
           ],
@@ -385,7 +387,7 @@ class _SecondsInput extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          'Range: $minValue - ${maxValue}s',
+          LocaleKeys.seekRangeSeconds.trArgsFmt([minValue, maxValue]),
           style: const TextStyle(color: RpColors.white_300, fontSize: 11),
         ),
       ],

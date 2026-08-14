@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rein_player/utils/localization/locale_keys.dart';
 import '../controller/developer_log_controller.dart';
 
 class DeveloperLogWindow extends StatelessWidget {
@@ -28,20 +29,21 @@ class DeveloperLogWindow extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Developer Logs', 
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)
+                    Text(
+                      LocaleKeys.devLogTitle.tr,
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)
                     ),
                     Row(
                       children: [
                         IconButton(
                           icon: const Icon(Icons.clear_all, color: Colors.white),
                           onPressed: DeveloperLogController.to.clearLogs,
-                          tooltip: 'Clear logs',
+                          tooltip: LocaleKeys.devLogClearLogs.tr,
                         ),
                         IconButton(
                           icon: const Icon(Icons.close, color: Colors.white),
                           onPressed: DeveloperLogController.to.toggleVisibility,
-                          tooltip: 'Close',
+                          tooltip: LocaleKeys.close.tr,
                         ),
                       ],
                     ),

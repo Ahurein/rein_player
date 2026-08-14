@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:rein_player/common/widgets/rp_snackbar.dart';
 import 'package:rein_player/features/playback/controller/ab_loop_controller.dart';
 import 'package:rein_player/features/playback/controller/controls_controller.dart';
 import 'package:rein_player/features/playback/models/ab_loop_segment.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
+import 'package:rein_player/utils/localization/locale_keys.dart';
+import 'package:rein_player/utils/localization/tr_args.dart';
 
 class ABLoopEditorModal extends StatefulWidget {
   final ABLoopSegment? segment;
@@ -103,7 +106,9 @@ class _ABLoopEditorModalState extends State<ABLoopEditorModal> {
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  _isEditing ? 'Edit A-B Loop Segment' : 'Add A-B Loop Segment',
+                  _isEditing
+                      ? LocaleKeys.abLoopEditorEditTitle.tr
+                      : LocaleKeys.abLoopEditorAddTitle.tr,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,
@@ -116,13 +121,13 @@ class _ABLoopEditorModalState extends State<ABLoopEditorModal> {
 
             // Start time
             _buildTextField(
-              label: 'Point A (Start Time)',
+              label: LocaleKeys.abLoopEditorPointA.tr,
               controller: _startTimeController,
-              hint: 'HH:MM:SS',
+              hint: LocaleKeys.abLoopEditorHhmmss.tr,
               suffix: IconButton(
                 icon: const Icon(Icons.my_location, size: 18),
                 onPressed: _setCurrentPositionAsStart,
-                tooltip: 'Use current position',
+                tooltip: LocaleKeys.abLoopEditorUseCurrentPosition.tr,
                 color: RpColors.accent,
               ),
             ),
@@ -130,14 +135,14 @@ class _ABLoopEditorModalState extends State<ABLoopEditorModal> {
 
             // Duration
             _buildTextField(
-              label: 'Duration (seconds)',
+              label: LocaleKeys.abLoopEditorDuration.tr,
               controller: _durationController,
-              hint: 'e.g., 5.5 for 5.5 seconds',
-              suffix: const Padding(
-                padding: EdgeInsets.all(12.0),
+              hint: LocaleKeys.abLoopEditorDurationHint.tr,
+              suffix: Padding(
+                padding: const EdgeInsets.all(12.0),
                 child: Text(
-                  'sec',
-                  style: TextStyle(color: Colors.white60, fontSize: 14),
+                  LocaleKeys.abLoopEditorSec.tr,
+                  style: const TextStyle(color: Colors.white60, fontSize: 14),
                 ),
               ),
             ),
@@ -145,9 +150,9 @@ class _ABLoopEditorModalState extends State<ABLoopEditorModal> {
 
             // Loop count
             _buildTextField(
-              label: 'Loop Count',
+              label: LocaleKeys.abLoopEditorLoopCount.tr,
               controller: _loopCountController,
-              hint: 'Number of times to repeat',
+              hint: LocaleKeys.abLoopEditorLoopCountHint.tr,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             ),
             const SizedBox(height: 16),
@@ -164,18 +169,18 @@ class _ABLoopEditorModalState extends State<ABLoopEditorModal> {
                   },
                   activeColor: RpColors.accent,
                 ),
-                const Text(
-                  'Enable repeat delay',
-                  style: TextStyle(color: Colors.white, fontSize: 14),
+                Text(
+                  LocaleKeys.abLoopEditorEnableRepeatDelay.tr,
+                  style: const TextStyle(color: Colors.white, fontSize: 14),
                 ),
               ],
             ),
             if (_delayEnabled) ...[
               const SizedBox(height: 8),
               _buildTextField(
-                label: 'Repeat Delay (milliseconds)',
+                label: LocaleKeys.abLoopEditorRepeatDelay.tr,
                 controller: _delayController,
-                hint: 'Pause duration on last frame',
+                hint: LocaleKeys.abLoopEditorRepeatDelayHint.tr,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               ),
             ],
@@ -183,9 +188,9 @@ class _ABLoopEditorModalState extends State<ABLoopEditorModal> {
 
             // Title
             _buildTextField(
-              label: 'Title (Optional)',
+              label: LocaleKeys.abLoopEditorTitle.tr,
               controller: _titleController,
-              hint: 'Segment description or label',
+              hint: LocaleKeys.abLoopEditorTitleHint.tr,
             ),
             const SizedBox(height: 24),
 
@@ -196,7 +201,7 @@ class _ABLoopEditorModalState extends State<ABLoopEditorModal> {
                 // Cancel button
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Cancel'),
+                  child: Text(LocaleKeys.cancel.tr),
                   style: TextButton.styleFrom(
                     foregroundColor: Colors.white70,
                   ),
@@ -210,7 +215,11 @@ class _ABLoopEditorModalState extends State<ABLoopEditorModal> {
                     backgroundColor: RpColors.accent,
                     foregroundColor: Colors.white,
                   ),
-                  child: Text(_isEditing ? 'Update' : 'Add'),
+                  child: Text(
+                    _isEditing
+                        ? LocaleKeys.abLoopEditorUpdate.tr
+                        : LocaleKeys.abLoopEditorAdd.tr,
+                  ),
                 ),
               ],
             ),
@@ -297,16 +306,16 @@ class _ABLoopEditorModalState extends State<ABLoopEditorModal> {
 
       if (loopCount < 1) {
         RpSnackbar.error(
-          title: 'Invalid Loop Count',
-          message: 'Loop count must be at least 1',
+          title: LocaleKeys.abLoopEditorInvalidLoopCount.tr,
+          message: LocaleKeys.abLoopEditorInvalidLoopCountMsg.tr,
         );
         return;
       }
 
       if (durationMs < 100) {
         RpSnackbar.error(
-          title: 'Invalid Duration',
-          message: 'Duration must be at least 0.1 seconds',
+          title: LocaleKeys.abLoopEditorInvalidDuration.tr,
+          message: LocaleKeys.abLoopEditorInvalidDurationMsg.tr,
         );
         return;
       }
@@ -330,8 +339,9 @@ class _ABLoopEditorModalState extends State<ABLoopEditorModal> {
       Navigator.of(context).pop();
     } catch (e) {
       RpSnackbar.error(
-        title: 'Invalid Input',
-        message: 'Please check your input values: ${e.toString()}',
+        title: LocaleKeys.abLoopEditorInvalidInput.tr,
+        message:
+            LocaleKeys.abLoopEditorInvalidInputMsg.trArgsFmt([e.toString()]),
       );
     }
   }

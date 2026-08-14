@@ -11,6 +11,8 @@ import 'package:rein_player/features/playback/models/pbf_bookmark_file.dart';
 import 'package:rein_player/utils/constants/rp_keys.dart';
 import 'package:rein_player/utils/local_storage/rp_local_storage.dart';
 import 'package:rein_player/features/playback/views/ab_loop_editor_modal.dart';
+import 'package:rein_player/utils/localization/locale_keys.dart';
+import 'package:rein_player/utils/localization/tr_args.dart';
 import 'package:rein_player/utils/parsers/pbf_parser.dart';
 
 class ABLoopController extends GetxController {
@@ -92,9 +94,9 @@ class ABLoopController extends GetxController {
         await _saveSegmentsToStorage(videoPath);
 
         RpSnackbar.success(
-          title: 'A-B Loops Loaded',
-          message:
-              '${pbf.segments.length} segment(s) loaded from ${path.basename(pbfPath)}',
+          title: LocaleKeys.snackABLoopsLoaded.tr,
+          message: LocaleKeys.snackSegmentsLoadedFrom
+              .trArgsFmt([pbf.segments.length, path.basename(pbfPath)]),
         );
 
         // Auto-start playback if segments exist
@@ -103,7 +105,7 @@ class ABLoopController extends GetxController {
         }
       } catch (e) {
         RpSnackbar.error(
-          message: 'Failed to load PBF file: ${e.toString()}',
+          message: LocaleKeys.snackFailedLoadPBF.trArgsFmt([e.toString()]),
         );
       }
     } else {
@@ -121,7 +123,7 @@ class ABLoopController extends GetxController {
     try {
       final video = VideoAndControlController.to.currentVideo.value;
       if (video == null) {
-        RpSnackbar.warning(message: 'No video is currently playing');
+        RpSnackbar.warning(message: LocaleKeys.noVideoPlaying.tr);
         return;
       }
 
@@ -138,11 +140,12 @@ class ABLoopController extends GetxController {
       await _saveSegmentsToStorage(video.location);
 
       RpSnackbar.success(
-        title: 'Segment Added',
-        message: 'A-B loop segment added at ${newSegment.formattedStartTime}',
+        title: LocaleKeys.snackSegmentAdded.tr,
+        message: LocaleKeys.snackSegmentAddedMsg
+            .trArgsFmt([newSegment.formattedStartTime]),
       );
     } catch (e) {
-      RpSnackbar.error(message: 'Failed to add segment');
+      RpSnackbar.error(message: LocaleKeys.snackFailedAddSegment.tr);
     }
   }
 
@@ -150,7 +153,7 @@ class ABLoopController extends GetxController {
   void addSegmentAtCurrentPosition() {
     final position = ControlsController.to.videoPosition.value;
     if (position == null) {
-      RpSnackbar.warning(message: 'Unable to get current position');
+      RpSnackbar.warning(message: LocaleKeys.snackUnableGetPosition.tr);
       return;
     }
 
@@ -199,9 +202,9 @@ class ABLoopController extends GetxController {
         await _saveSegmentsToStorage(video.location);
       }
 
-      RpSnackbar.success(message: 'Segment updated');
+      RpSnackbar.success(message: LocaleKeys.snackSegmentUpdated.tr);
     } catch (e) {
-      RpSnackbar.error(message: 'Failed to update segment');
+      RpSnackbar.error(message: LocaleKeys.snackFailedUpdateSegment.tr);
     }
   }
 
@@ -222,8 +225,9 @@ class ABLoopController extends GetxController {
       }
 
       RpSnackbar.success(
-        title: 'Segment Deleted',
-        message: 'Segment at ${segment.formattedStartTime} removed',
+        title: LocaleKeys.snackSegmentDeleted.tr,
+        message: LocaleKeys.snackSegmentDeletedMsg
+            .trArgsFmt([segment.formattedStartTime]),
       );
 
       // Stop playback if no segments left
@@ -231,7 +235,7 @@ class ABLoopController extends GetxController {
         stopABLoopPlayback();
       }
     } catch (e) {
-      RpSnackbar.error(message: 'Failed to delete segment');
+      RpSnackbar.error(message: LocaleKeys.snackFailedDeleteSegment.tr);
     }
   }
 
@@ -250,11 +254,11 @@ class ABLoopController extends GetxController {
       }
 
       RpSnackbar.success(
-        title: 'Segments Cleared',
-        message: 'All A-B loop segments removed',
+        title: LocaleKeys.snackSegmentsCleared.tr,
+        message: LocaleKeys.snackSegmentsClearedMsg.tr,
       );
     } catch (e) {
-      RpSnackbar.error(message: 'Failed to clear segments');
+      RpSnackbar.error(message: LocaleKeys.snackFailedClearSegments.tr);
     }
   }
 
@@ -265,7 +269,7 @@ class ABLoopController extends GetxController {
       final video = VideoAndControlController.to.currentVideo.value;
 
       if (video == null) {
-        RpSnackbar.warning(message: 'No video is currently playing');
+        RpSnackbar.warning(message: LocaleKeys.noVideoPlaying.tr);
         return;
       }
 
@@ -273,8 +277,9 @@ class ABLoopController extends GetxController {
       await _saveSegmentsToStorage(video.location);
 
       RpSnackbar.success(
-        title: 'Import Successful',
-        message: '${pbf.segments.length} segment(s) imported from PBF file',
+        title: LocaleKeys.snackImportSuccessful.tr,
+        message: LocaleKeys.snackImportSuccessfulMsg
+            .trArgsFmt([pbf.segments.length]),
       );
 
       // Auto-start playback
@@ -283,7 +288,7 @@ class ABLoopController extends GetxController {
       }
     } catch (e) {
       RpSnackbar.error(
-        message: 'Failed to import PBF file: ${e.toString()}',
+        message: LocaleKeys.snackFailedImportPBF.trArgsFmt([e.toString()]),
       );
     }
   }
@@ -292,13 +297,13 @@ class ABLoopController extends GetxController {
   Future<void> exportToPBF([String? filePath]) async {
     try {
       if (segments.isEmpty) {
-        RpSnackbar.warning(message: 'No segments to export');
+        RpSnackbar.warning(message: LocaleKeys.snackNoSegmentsToExport.tr);
         return;
       }
 
       final video = VideoAndControlController.to.currentVideo.value;
       if (video == null) {
-        RpSnackbar.warning(message: 'No video is currently playing');
+        RpSnackbar.warning(message: LocaleKeys.noVideoPlaying.tr);
         return;
       }
 
@@ -308,7 +313,7 @@ class ABLoopController extends GetxController {
       } else {
         // Prompt user to save file
         final result = await FilePicker.platform.saveFile(
-          dialogTitle: 'Export A-B Loops',
+          dialogTitle: LocaleKeys.snackExportABLoopsTitle.tr,
           fileName: '${path.basenameWithoutExtension(video.location)}.pbf',
           type: FileType.custom,
           allowedExtensions: ['pbf'],
@@ -326,12 +331,13 @@ class ABLoopController extends GetxController {
       await PBFParser.exportToFile(pbf, exportPath);
 
       RpSnackbar.success(
-        title: 'Export Successful',
-        message: 'A-B loops exported to ${path.basename(exportPath)}',
+        title: LocaleKeys.snackExportSuccessful.tr,
+        message: LocaleKeys.snackExportSuccessfulMsg
+            .trArgsFmt([path.basename(exportPath)]),
       );
     } catch (e) {
       RpSnackbar.error(
-        message: 'Failed to export PBF file: ${e.toString()}',
+        message: LocaleKeys.snackFailedExportPBF.trArgsFmt([e.toString()]),
       );
     }
   }
@@ -339,7 +345,7 @@ class ABLoopController extends GetxController {
   /// Start A-B loop playback
   void startABLoopPlayback() {
     if (segments.isEmpty) {
-      RpSnackbar.info(message: 'No A-B loop segments available');
+      RpSnackbar.info(message: LocaleKeys.snackNoABLoopSegments.tr);
       return;
     }
 
@@ -355,7 +361,7 @@ class ABLoopController extends GetxController {
     _startPositionMonitoring();
 
     RpSnackbar.info(
-      message: 'A-B loop playback started (${segments.length} segment(s))',
+      message: LocaleKeys.snackABLoopStarted.trArgsFmt([segments.length]),
     );
   }
 
@@ -366,7 +372,7 @@ class ABLoopController extends GetxController {
     _positionSubscription = null;
     _isPausedForDelay = false;
 
-    RpSnackbar.info(message: 'A-B loop playback stopped');
+    RpSnackbar.info(message: LocaleKeys.snackABLoopStopped.tr);
   }
 
   /// Toggle A-B loop playback
@@ -386,7 +392,7 @@ class ABLoopController extends GetxController {
   /// Jump to next segment
   Future<void> jumpToNextSegment() async {
     if (segments.isEmpty) {
-      RpSnackbar.info(message: 'No segments available');
+      RpSnackbar.info(message: LocaleKeys.snackNoSegments.tr);
       return;
     }
 
@@ -398,14 +404,15 @@ class ABLoopController extends GetxController {
     await VideoAndControlController.to.player.seek(segment.startTime);
 
     RpSnackbar.info(
-      message: 'Jumped to segment ${currentSegmentIndex.value + 1}',
+      message:
+          LocaleKeys.snackJumpedToSegment.trArgsFmt([currentSegmentIndex.value + 1]),
     );
   }
 
   /// Jump to previous segment
   Future<void> jumpToPreviousSegment() async {
     if (segments.isEmpty) {
-      RpSnackbar.info(message: 'No segments available');
+      RpSnackbar.info(message: LocaleKeys.snackNoSegments.tr);
       return;
     }
 
@@ -417,7 +424,8 @@ class ABLoopController extends GetxController {
     await VideoAndControlController.to.player.seek(segment.startTime);
 
     RpSnackbar.info(
-      message: 'Jumped to segment ${currentSegmentIndex.value + 1}',
+      message:
+          LocaleKeys.snackJumpedToSegment.trArgsFmt([currentSegmentIndex.value + 1]),
     );
   }
 

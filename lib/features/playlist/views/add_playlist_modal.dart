@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rein_player/features/playlist/controller/playlist_controller.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
+import 'package:rein_player/utils/localization/locale_keys.dart';
 
 import 'package:rein_player/utils/constants/rp_sizes.dart';
 
@@ -29,7 +30,7 @@ class RpAddPlaylistModal extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                  Text(
-                  'Add New Playlist',
+                  LocaleKeys.playlistAddNewPlaylist.tr,
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
                 IconButton(
@@ -54,8 +55,8 @@ class RpAddPlaylistModal extends StatelessWidget {
                   controller: PlaylistController.to.playlistNameController,
                   style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.normal),
                   focusNode: PlaylistController.to.playlistNameFocusNode,
-                  decoration:  const InputDecoration(
-                    labelText: 'Playlist Name',
+                  decoration: InputDecoration(
+                    labelText: LocaleKeys.playlistName.tr,
                     labelStyle: TextStyle(color: RpColors.black_600, fontSize: 12),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: RpColors.black_500),
@@ -81,7 +82,7 @@ class RpAddPlaylistModal extends StatelessWidget {
                     ),
                     child: Text(
                       PlaylistController.to.selectedFolderPath.value.isEmpty
-                          ? 'No folder selected'
+                          ? LocaleKeys.playlistNoFolderSelected.tr
                           : PlaylistController.to.selectedFolderPath.value,
                       style: Theme.of(context).textTheme.labelMedium,
                       maxLines: 1,
@@ -93,7 +94,7 @@ class RpAddPlaylistModal extends StatelessWidget {
                 ElevatedButton.icon(
                   onPressed: PlaylistController.to.pickFolder,
                   icon: const Icon(Icons.folder_open),
-                  label: const Text('Browse'),
+                  label: Text(LocaleKeys.playlistBrowse.tr),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: RpColors.black_600,
                     textStyle: const TextStyle(fontSize: 12)
@@ -113,7 +114,7 @@ class RpAddPlaylistModal extends StatelessWidget {
                     Get.back();
                   },
                   child: Text(
-                    'Cancel',
+                    LocaleKeys.cancel.tr,
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                 ),
@@ -123,7 +124,7 @@ class RpAddPlaylistModal extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: RpColors.accent,
                   ),
-                  child: Text('Create Playlist', style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Colors.black),),
+                  child: Text(LocaleKeys.playlistCreatePlaylist.tr, style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Colors.black),),
                 ),
               ],
             ),

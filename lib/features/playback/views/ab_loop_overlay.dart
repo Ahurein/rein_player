@@ -5,6 +5,7 @@ import 'package:rein_player/features/playback/controller/ab_loop_controller.dart
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 import 'package:rein_player/features/playback/models/ab_loop_segment.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
+import 'package:rein_player/utils/localization/locale_keys.dart';
 
 class ABLoopOverlay extends StatelessWidget {
   const ABLoopOverlay({super.key});
@@ -57,7 +58,7 @@ class ABLoopOverlay extends StatelessWidget {
 
   Widget _buildHeader(BuildContext context) {
     final videoName =
-        VideoAndControlController.to.currentVideo.value?.name ?? 'No video';
+        VideoAndControlController.to.currentVideo.value?.name ?? LocaleKeys.abLoopNoVideo.tr;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -74,9 +75,9 @@ class ABLoopOverlay extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'A-B Loop Segments',
-                  style: TextStyle(
+                Text(
+                  LocaleKeys.abLoopSegments.tr,
+                  style: const TextStyle(
                     color: RpColors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
@@ -105,7 +106,9 @@ class ABLoopOverlay extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4),
               ),
               child: Text(
-                isActive ? 'ACTIVE' : 'INACTIVE',
+                isActive
+                    ? LocaleKeys.abLoopActive.tr
+                    : LocaleKeys.abLoopInactive.tr,
                 style: TextStyle(
                   color: isActive ? RpColors.accent : RpColors.white_300,
                   fontSize: 10,
@@ -118,7 +121,7 @@ class ABLoopOverlay extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.close, color: RpColors.white, size: 18),
             onPressed: ABLoopController.to.toggleOverlay,
-            tooltip: 'Close',
+            tooltip: LocaleKeys.close.tr,
           ),
         ],
       ),
@@ -140,7 +143,10 @@ class ABLoopOverlay extends StatelessWidget {
           ElevatedButton.icon(
             onPressed: ABLoopController.to.addSegmentAtCurrentPosition,
             icon: const Icon(Icons.add, size: 16),
-            label: const Text('New Segment...', style: TextStyle(fontSize: 12)),
+            label: Text(
+                LocaleKeys.abLoopNewSegment.tr,
+                style: const TextStyle(fontSize: 12),
+              ),
             style: ElevatedButton.styleFrom(
               backgroundColor: RpColors.accent,
               foregroundColor: RpColors.white,
@@ -156,8 +162,12 @@ class ABLoopOverlay extends StatelessWidget {
             return ElevatedButton.icon(
               onPressed: ABLoopController.to.toggleABLoopPlayback,
               icon: Icon(isActive ? Icons.stop : Icons.play_arrow, size: 16),
-              label: Text(isActive ? 'Stop' : 'Start',
-                  style: const TextStyle(fontSize: 12)),
+              label: Text(
+                  isActive
+                      ? LocaleKeys.abLoopStop.tr
+                      : LocaleKeys.abLoopStart.tr,
+                  style: const TextStyle(fontSize: 12),
+                ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: isActive
                     ? RpColors.red.withValues(alpha: 0.8)
@@ -178,7 +188,7 @@ class ABLoopOverlay extends StatelessWidget {
             onPressed: () async {
               // Will be implemented in manual_import phase
             },
-            tooltip: 'Import PBF',
+            tooltip: LocaleKeys.abLoopImportPBF.tr,
           ),
 
           // Export button
@@ -188,7 +198,7 @@ class ABLoopOverlay extends StatelessWidget {
               icon: const Icon(Icons.file_download, size: 18),
               color: hasSegments ? RpColors.white_300 : RpColors.white_300,
               onPressed: hasSegments ? ABLoopController.to.exportToPBF : null,
-              tooltip: 'Export PBF',
+              tooltip: LocaleKeys.abLoopExportPBF.tr,
             );
           }),
 
@@ -201,7 +211,7 @@ class ABLoopOverlay extends StatelessWidget {
                   ? RpColors.red.withValues(alpha: 0.7)
                   : RpColors.white.withValues(alpha: 0.3),
               onPressed: hasSegments ? () => _showClearConfirmation() : null,
-              tooltip: 'Clear All',
+              tooltip: LocaleKeys.abLoopClearAll.tr,
             );
           }),
         ],
@@ -223,7 +233,7 @@ class ABLoopOverlay extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'No A-B loop segments yet',
+              LocaleKeys.abLoopEmptyTitle.tr,
               style: TextStyle(
                 color: Colors.white.withValues(alpha: 0.6),
                 fontSize: 16,
@@ -232,7 +242,7 @@ class ABLoopOverlay extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Press Ctrl+L or click "New Segment"\nto configure and add a segment',
+              LocaleKeys.abLoopEmptyHint.tr,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white.withValues(alpha: 0.4),
@@ -269,7 +279,7 @@ class ABLoopOverlay extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _buildKeyHint('Ctrl+L', 'New'),
+          _buildKeyHint('Ctrl+L', LocaleKeys.abLoopKeyNew.tr),
           const SizedBox(width: 12),
           Container(
             width: 1,
@@ -277,11 +287,11 @@ class ABLoopOverlay extends StatelessWidget {
             color: Colors.white.withValues(alpha: 0.2),
           ),
           const SizedBox(width: 12),
-          _buildKeyHint('L', 'Toggle'),
+          _buildKeyHint('L', LocaleKeys.abLoopKeyToggle.tr),
           const SizedBox(width: 12),
-          _buildKeyHint('[', 'Prev'),
+          _buildKeyHint('[', LocaleKeys.abLoopKeyPrev.tr),
           const SizedBox(width: 12),
-          _buildKeyHint(']', 'Next'),
+          _buildKeyHint(']', LocaleKeys.abLoopKeyNext.tr),
         ],
       ),
     );
@@ -327,11 +337,10 @@ class ABLoopOverlay extends StatelessWidget {
 
     RpDialog.showConfirmation(
       context: context,
-      title: 'Clear All Segments?',
-      message:
-          'This will remove all A-B loop segments for this video. This action cannot be undone.',
-      confirmText: 'Clear All',
-      cancelText: 'Cancel',
+      title: LocaleKeys.dialogClearAllSegmentsTitle.tr,
+      message: LocaleKeys.dialogClearAllSegmentsMessage.tr,
+      confirmText: LocaleKeys.clearAll.tr,
+      cancelText: LocaleKeys.cancel.tr,
       confirmColor: Colors.red,
       titleIcon: const Icon(Icons.delete_sweep, color: Colors.red),
     ).then((confirmed) {
@@ -462,7 +471,7 @@ class _SegmentItemState extends State<_SegmentItem> {
                       icon: const Icon(Icons.play_arrow, size: 16),
                       color: RpColors.white.withValues(alpha: 0.7),
                       onPressed: _jumpToSegment,
-                      tooltip: 'Jump to segment',
+                      tooltip: LocaleKeys.abLoopJumpToSegment.tr,
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(
                         minWidth: 24,
@@ -473,7 +482,7 @@ class _SegmentItemState extends State<_SegmentItem> {
                       icon: const Icon(Icons.edit, size: 16),
                       color: RpColors.white.withValues(alpha: 0.7),
                       onPressed: _editSegment,
-                      tooltip: 'Edit segment',
+                      tooltip: LocaleKeys.abLoopEditSegment.tr,
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(
                         minWidth: 24,
@@ -484,7 +493,7 @@ class _SegmentItemState extends State<_SegmentItem> {
                       icon: const Icon(Icons.delete, size: 16),
                       color: RpColors.red.withValues(alpha: 0.7),
                       onPressed: _deleteSegment,
-                      tooltip: 'Delete segment',
+                      tooltip: LocaleKeys.abLoopDeleteSegment.tr,
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(
                         minWidth: 24,

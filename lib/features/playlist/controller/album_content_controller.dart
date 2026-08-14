@@ -13,6 +13,7 @@ import 'package:rein_player/utils/constants/rp_extensions.dart';
 import 'package:rein_player/utils/extensions/media_extensions.dart';
 import 'package:rein_player/utils/helpers/duration_helper.dart';
 import 'package:rein_player/utils/helpers/media_helper.dart';
+import 'package:rein_player/utils/localization/locale_keys.dart';
 
 class AlbumContentController extends GetxController {
   static AlbumContentController get to => Get.find();
@@ -320,7 +321,7 @@ class AlbumContentController extends GetxController {
     try {
       final file = File(item.location);
       if (!await file.exists()) {
-        return {'error': 'File not found'};
+        return {'error': LocaleKeys.albumFileNotFound.tr};
       }
 
       final stat = await file.stat();
@@ -350,7 +351,7 @@ class AlbumContentController extends GetxController {
         'directory': path.dirname(item.location),
       };
     } catch (e) {
-      return {'error': 'Failed to get file properties'};
+      return {'error': LocaleKeys.albumFailedGetProperties.tr};
     }
   }
 

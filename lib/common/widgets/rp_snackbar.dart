@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
+import 'package:rein_player/utils/localization/locale_keys.dart';
+import 'package:rein_player/utils/localization/tr_args.dart';
 
 enum RpSnackbarType { success, error, info, warning }
 
@@ -52,11 +54,11 @@ class RpSnackbar {
 
   static void success({
     required String message,
-    String title = 'Success',
+    String title = '',
     Duration duration = const Duration(seconds: 2),
   }) {
     show(
-      title: title,
+      title: (title.isEmpty ? LocaleKeys.success : title).tr,
       message: message,
       type: RpSnackbarType.success,
       duration: duration,
@@ -65,11 +67,11 @@ class RpSnackbar {
 
   static void error({
     required String message,
-    String title = 'Error',
+    String title = '',
     Duration duration = const Duration(seconds: 3),
   }) {
     show(
-      title: title,
+      title: (title.isEmpty ? LocaleKeys.error : title).tr,
       message: message,
       type: RpSnackbarType.error,
       duration: duration,
@@ -78,11 +80,11 @@ class RpSnackbar {
 
   static void info({
     required String message,
-    String title = 'Info',
+    String title = '',
     Duration duration = const Duration(seconds: 2),
   }) {
     show(
-      title: title,
+      title: (title.isEmpty ? LocaleKeys.info : title).tr,
       message: message,
       type: RpSnackbarType.info,
       duration: duration,
@@ -91,11 +93,11 @@ class RpSnackbar {
 
   static void warning({
     required String message,
-    String title = 'Warning',
+    String title = '',
     Duration duration = const Duration(seconds: 3),
   }) {
     show(
-      title: title,
+      title: (title.isEmpty ? LocaleKeys.warning : title).tr,
       message: message,
       type: RpSnackbarType.warning,
       duration: duration,
@@ -104,8 +106,8 @@ class RpSnackbar {
 
   static void copied({String item = 'Item'}) {
     success(
-      title: 'Copied',
-      message: '$item copied to clipboard',
+      title: LocaleKeys.copied.tr,
+      message: LocaleKeys.copiedToClipboard.trArgsFmt([item]),
       duration: const Duration(seconds: 2),
     );
   }

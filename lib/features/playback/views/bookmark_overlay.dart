@@ -5,6 +5,8 @@ import 'package:rein_player/features/playback/controller/bookmark_controller.dar
 import 'package:rein_player/features/playback/controller/video_and_controls_controller.dart';
 import 'package:rein_player/features/playback/models/video_bookmark.dart';
 import 'package:rein_player/utils/constants/rp_colors.dart';
+import 'package:rein_player/utils/localization/locale_keys.dart';
+import 'package:rein_player/utils/localization/tr_args.dart';
 
 class BookmarkOverlay extends StatelessWidget {
   const BookmarkOverlay({super.key});
@@ -54,7 +56,7 @@ class BookmarkOverlay extends StatelessWidget {
 
   Widget _buildHeader(BuildContext context) {
     final videoName =
-        VideoAndControlController.to.currentVideo.value?.name ?? 'No video';
+        VideoAndControlController.to.currentVideo.value?.name ?? LocaleKeys.abLoopNoVideo.tr;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -71,9 +73,9 @@ class BookmarkOverlay extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Bookmarks',
-                  style: TextStyle(
+                Text(
+                  LocaleKeys.bookmarkTitle.tr,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
@@ -100,7 +102,7 @@ class BookmarkOverlay extends StatelessWidget {
                     icon: const Icon(Icons.delete_sweep,
                         color: Colors.white, size: 18),
                     onPressed: () => _showClearConfirmation(),
-                    tooltip: 'Clear all bookmarks',
+                    tooltip: LocaleKeys.bookmarkClearAllTooltip.tr,
                   );
                 }
                 return const SizedBox.shrink();
@@ -108,7 +110,7 @@ class BookmarkOverlay extends StatelessWidget {
               IconButton(
                 icon: const Icon(Icons.close, color: Colors.white, size: 18),
                 onPressed: BookmarkController.to.toggleBookmarkOverlay,
-                tooltip: 'Close',
+                tooltip: LocaleKeys.close.tr,
               ),
             ],
           ),
@@ -131,7 +133,7 @@ class BookmarkOverlay extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'No bookmarks yet',
+              LocaleKeys.bookmarkEmptyTitle.tr,
               style: TextStyle(
                 color: Colors.white.withValues(alpha: 0.6),
                 fontSize: 16,
@@ -140,7 +142,7 @@ class BookmarkOverlay extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Press Ctrl+B to add a bookmark\nat the current position',
+              LocaleKeys.bookmarkEmptyHint.tr,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white.withValues(alpha: 0.4),
@@ -177,7 +179,7 @@ class BookmarkOverlay extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _buildKeyHint('Ctrl+B', 'Add'),
+          _buildKeyHint('Ctrl+B', LocaleKeys.bookmarkKeyAdd.tr),
           const SizedBox(width: 12),
           Container(
             width: 1,
@@ -185,9 +187,9 @@ class BookmarkOverlay extends StatelessWidget {
             color: Colors.white.withValues(alpha: 0.2),
           ),
           const SizedBox(width: 12),
-          _buildKeyHint('B', 'Next'),
+          _buildKeyHint('B', LocaleKeys.bookmarkKeyNext.tr),
           const SizedBox(width: 12),
-          _buildKeyHint('Shift+B', 'Previous'),
+          _buildKeyHint('Shift+B', LocaleKeys.bookmarkKeyPrevious.tr),
         ],
       ),
     );
@@ -233,11 +235,10 @@ class BookmarkOverlay extends StatelessWidget {
 
     RpDialog.showConfirmation(
       context: context,
-      title: 'Clear All Bookmarks?',
-      message:
-          'This will remove all bookmarks for this video. This action cannot be undone.',
-      confirmText: 'Clear All',
-      cancelText: 'Cancel',
+      title: LocaleKeys.dialogClearAllBookmarksTitle.tr,
+      message: LocaleKeys.dialogClearAllBookmarksMessage.tr,
+      confirmText: LocaleKeys.clearAll.tr,
+      cancelText: LocaleKeys.cancel.tr,
       confirmColor: Colors.red,
       titleIcon: const Icon(Icons.delete_sweep, color: Colors.red),
     ).then((confirmed) {
@@ -338,7 +339,7 @@ class _BookmarkItemState extends State<_BookmarkItem> {
                   icon: const Icon(Icons.play_arrow, size: 16),
                   color: Colors.white.withValues(alpha: 0.7),
                   onPressed: _jumpToBookmark,
-                  tooltip: 'Jump to bookmark',
+                  tooltip: LocaleKeys.bookmarkJumpToTooltip.tr,
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(
                     minWidth: 24,
@@ -349,7 +350,7 @@ class _BookmarkItemState extends State<_BookmarkItem> {
                   icon: const Icon(Icons.edit, size: 16),
                   color: Colors.white.withValues(alpha: 0.7),
                   onPressed: _startEditing,
-                  tooltip: 'Edit name',
+                  tooltip: LocaleKeys.bookmarkEditNameTooltip.tr,
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(
                     minWidth: 24,
@@ -360,7 +361,7 @@ class _BookmarkItemState extends State<_BookmarkItem> {
                   icon: const Icon(Icons.delete, size: 16),
                   color: Colors.red.withValues(alpha: 0.7),
                   onPressed: _deleteBookmark,
-                  tooltip: 'Delete bookmark',
+                  tooltip: LocaleKeys.bookmarkDeleteTooltip.tr,
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(
                     minWidth: 24,
@@ -377,7 +378,7 @@ class _BookmarkItemState extends State<_BookmarkItem> {
 
   Widget _buildNameDisplay() {
     final displayName = widget.bookmark.name.isEmpty
-        ? 'Bookmark ${widget.index + 1}'
+        ? LocaleKeys.bookmarkDefaultName.trArgsFmt([widget.index + 1])
         : widget.bookmark.name;
 
     return Text(
@@ -405,7 +406,7 @@ class _BookmarkItemState extends State<_BookmarkItem> {
         fontSize: 13,
       ),
       decoration: InputDecoration(
-        hintText: 'Enter bookmark name',
+        hintText: LocaleKeys.bookmarkEnterName.tr,
         hintStyle: TextStyle(
           color: Colors.white.withValues(alpha: 0.3),
           fontSize: 13,
