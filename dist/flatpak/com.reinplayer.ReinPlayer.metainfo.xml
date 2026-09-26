@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-  <id>one.ahurein.reinplayer</id>
+  <id>com.reinplayer.ReinPlayer</id>
 
   <name>Rein Player</name>
   <summary>A fast and intuitive video player</summary>
 
   <metadata_license>CC0-1.0</metadata_license>
-  <project_license>MIT</project_license>
+  <project_license>GPL-3.0-only</project_license>
 
   <description>
     <p>
@@ -24,13 +24,13 @@
     </ul>
   </description>
 
-  <launchable type="desktop-id">one.ahurein.reinplayer.desktop</launchable>
+  <launchable type="desktop-id">com.reinplayer.ReinPlayer.desktop</launchable>
 
   <url type="homepage">https://github.com/Ahurein/rein_player</url>
   <url type="bugtracker">https://github.com/Ahurein/rein_player/issues</url>
   <url type="vcs-browser">https://github.com/Ahurein/rein_player</url>
 
-  <developer id="one.ahurein">
+  <developer id="com.reinplayer">
     <name>Ebenezer Ahurein</name>
   </developer>
 

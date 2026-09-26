@@ -10,13 +10,13 @@ slots:
   dbus-mixin:
     interface: dbus
     bus: session
-    name: one.ahurein.reinplayer
+    name: com.reinplayer.ReinPlayer
 
 apps:
   reinplayer:
     command: rein_player
     desktop: gui/reinplayer.desktop
-    common-id: one.ahurein.reinplayer
+    common-id: com.reinplayer.ReinPlayer
     extensions: [gnome]
     environment:
       LD_LIBRARY_PATH: $LD_LIBRARY_PATH:$SNAP/usr/lib/x86_64-linux-gnu/blas:$SNAP/usr/lib/x86_64-linux-gnu/lapack
