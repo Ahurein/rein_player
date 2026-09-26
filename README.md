@@ -412,6 +412,22 @@ cd reinplayer_linux_amd64_portable
 
 ---
 
+### Method 4: Flatpak Bundle
+
+Download the `.flatpak` file from the release page, then install it with:
+
+```bash
+flatpak install --user ./ReinPlayer-1.1.0-x86_64.flatpak
+flatpak install --user flathub org.freedesktop.Platform.GL.default//26.08
+flatpak run com.reinplayer.ReinPlayer
+```
+
+The GL extension is required for Flutter rendering on Intel/AMD systems and
+may not be downloaded with the app. See [Flatpak troubleshooting](docs/FLATPAK.md#11-troubleshooting)
+if the window reports a pixel format error or you use NVIDIA graphics.
+
+---
+
 ### 🗑️ Uninstall
 
 **Snap:**

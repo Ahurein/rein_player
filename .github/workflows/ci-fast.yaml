@@ -114,7 +114,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y clang cmake ninja-build pkg-config \
             libgtk-3-dev libmpv-dev mpv flatpak flatpak-builder \
-            appstream desktop-file-utils
+            appstream desktop-file-utils xvfb xauth
 
       - name: Install Flutter
         uses: subosito/flutter-action@v2
@@ -150,6 +150,29 @@ jobs:
           fi
           printf '%s\n' "$dependency_report"
           if printf '%s\n' "$dependency_report" | grep -E '=> not found|version .* not found'; then
+            exit 1
+          fi
+
+      - name: Smoke test Flatpak graphics
+        run: |
+          # The GL driver is a separate runtime extension, not part of the app bundle.
+          flatpak install --user --noninteractive -y flathub \
+            org.freedesktop.Platform.GL.default//26.08
+
+          set +e
+          xvfb-run -a -s '-screen 0 1280x720x24' \
+            timeout 20s flatpak run --user \
+              --env=LIBGL_ALWAYS_SOFTWARE=1 \
+              com.reinplayer.ReinPlayer >flatpak-launch.log 2>&1
+          launch_status=$?
+          set -e
+
+          cat flatpak-launch.log
+          if grep -Ei 'Failed to start Flutter renderer|Failed to initialize GLArea|No available configurations for the given pixel format' flatpak-launch.log; then
+            exit 1
+          fi
+          if [ "$launch_status" -ne 124 ]; then
+            echo "Rein Player exited during the graphics smoke test (status $launch_status)."
             exit 1
           fi
 

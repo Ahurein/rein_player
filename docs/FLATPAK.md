@@ -170,6 +170,10 @@ flatpak --user remote-add --no-gpg-verify --if-not-exists \
     reinplayer-local "$(realpath build/flatpak-repo)"
 flatpak --user install -y reinplayer-local com.reinplayer.ReinPlayer
 
+# Flutter needs a GL driver inside the runtime. This Mesa extension is needed
+# on Intel/AMD systems if Flatpak did not install it automatically.
+flatpak install --user flathub org.freedesktop.Platform.GL.default//26.08
+
 # Check that the launcher starts, then open a video and verify playback.
 flatpak run com.reinplayer.ReinPlayer
 ```
@@ -178,8 +182,15 @@ To install a `.flatpak` bundle on a fresh machine:
 
 ```bash
 flatpak install --user ./ReinPlayer-1.1.0-x86_64.flatpak
+flatpak install --user flathub org.freedesktop.Platform.GL.default//26.08
 flatpak run com.reinplayer.ReinPlayer
 ```
+
+The GL extension is separate from the `.flatpak` bundle. Its branch must match
+the Freedesktop runtime branch in the manifest. On NVIDIA systems, check
+`flatpak --gl-drivers` and install the matching `org.freedesktop.Platform.GL.nvidia-*`
+extension too if it is missing. `flatpak list --runtime` shows which extensions
+are installed.
 
 ---
 
@@ -329,6 +340,7 @@ A skeleton `flathub.json` for the current x86_64-only build:
 | `Permission denied` opening any file | over-tight sandbox | use the file chooser portal, or temporarily add `--filesystem=host` and re-test |
 | App launches then crashes immediately | wrapper `LD_LIBRARY_PATH` wrong | `flatpak run --command=sh com.reinplayer.ReinPlayer` then `ldd /app/lib/reinplayer/rein_player` |
 | `Could not load shared library libmpv.so.2` | the host libmpv was not packaged | verify `build/flatpak/payload/bundle/lib/libmpv.so.2` exists after running `build.sh flatpak` |
+| `No available configurations for the given pixel format` | Flutter cannot create a GL context; the matching Flatpak GL driver extension may be missing | check `flatpak list --runtime` and `flatpak --gl-drivers`; on Intel/AMD install `org.freedesktop.Platform.GL.default//26.08`, then relaunch |
 
 Useful debug commands:
 
@@ -351,12 +363,17 @@ journalctl --user -f -t flatpak-session-helper
 to `dev`, tag pushes, and manual workflow runs. It builds the Flutter Linux bundle on
 `ubuntu-24.04`, validates the desktop and AppStream files, then runs
 `./dist/build.sh flatpak`, installs the bundle, and checks its shared libraries
-against the installed runtime. The resulting `.flatpak` is uploaded
+against the installed runtime. It also installs the Flatpak Mesa GL extension
+and checks that the app stays running without a Flutter/GTK graphics error under
+Xvfb. The resulting `.flatpak` is uploaded
 as a workflow artifact and attached to tagged
 GitHub releases.
 
 This CI job builds the standalone bundle described above. It does not submit
-to Flathub or replace the Linux installation and playback smoke test.
+to Flathub or replace the Linux installation and playback smoke test. Installing
+the GL extension in CI provides a graphics test environment; it does not put
+the driver inside the application bundle. Flatpak installs runtime extensions
+separately according to the user's graphics hardware.
 
 ---
 
