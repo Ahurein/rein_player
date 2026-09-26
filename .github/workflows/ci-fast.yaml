@@ -2,13 +2,15 @@ name: CI Fast
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches: ["dev"]
   push:
-    branches: ["github-actions-test"]
     tags:
       - "v*"
 
 jobs:
   build-macos:
+    if: github.event_name != 'pull_request'
     runs-on: macos-latest
     steps:
       - name: Checkout code
@@ -44,6 +46,7 @@ jobs:
           overwrite: true
 
   build-linux:
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/ahurein/flutter-gtk-mpv:latest
@@ -98,6 +101,64 @@ jobs:
           tag: ${{ github.ref }}
           overwrite: true
 
+  build-linux-flatpak:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Install Linux build and Flatpak tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build pkg-config \
+            libgtk-3-dev libmpv-dev mpv flatpak flatpak-builder \
+            appstream desktop-file-utils
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.32.0
+          cache: true
+
+      - name: Build Flutter Linux bundle
+        run: |
+          flutter pub get
+          flutter build linux --release
+
+      - name: Validate Flatpak metadata
+        run: |
+          appstreamcli validate --pedantic dist/flatpak/com.reinplayer.ReinPlayer.metainfo.xml
+          desktop-file-validate dist/flatpak/com.reinplayer.ReinPlayer.desktop
+
+      - name: Build Flatpak bundle
+        run: ./dist/build.sh flatpak
+
+      - name: Smoke test Flatpak launcher
+        run: |
+          flatpak-builder --run build/flatpak/build-dir \
+            dist/flatpak/com.reinplayer.ReinPlayer.yml \
+            reinplayer --version
+
+      - name: Upload Flatpak artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: reinplayer-flatpak
+          path: build/ReinPlayer-*-x86_64.flatpak
+          if-no-files-found: error
+
+      - name: Upload Flatpak to GitHub release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: build/ReinPlayer-*-x86_64.flatpak
+          file_glob: true
+          tag: ${{ github.ref }}
+          overwrite: true
+
   # build-linux-appimage:
   #   needs: build-linux
   #   runs-on: ubuntu-latest
@@ -132,6 +193,7 @@ jobs:
   #         overwrite: true
 
   build-linux-snap:
+    if: github.event_name != 'pull_request'
     needs: build-linux
     runs-on: ubuntu-latest
     steps:
