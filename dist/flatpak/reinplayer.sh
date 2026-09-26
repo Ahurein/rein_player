@@ -1,7 +1,7 @@
 #!/bin/bash
 # Launcher for Rein Player inside the Flatpak sandbox.
-# Adds the bundled lib/ directory to the loader path so the Flutter engine
-# and bundled libmpv resolve at runtime, then execs the real binary.
+# Adds the packaged lib/ directory to the loader path so the Flutter engine
+# and the libraries absent from the Flatpak runtime resolve at startup.
 
 set -e
 
