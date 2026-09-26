@@ -39,21 +39,22 @@ Key vocabulary:
 
 ## 2. Why our manifest looks the way it does
 
-Rein Player is a Flutter Linux app that uses **media_kit**, which in turn
-ships a prebuilt `libmpv` inside the Flutter Linux bundle (`build/linux/x64/release/bundle/lib/`).
-That changes the packaging strategy in two important ways:
+Rein Player is a Flutter Linux app that uses **media_kit**. On Linux, its
+video plugin links to the build host's `libmpv.so.2`; the Flutter bundle does
+not include that library. That shapes the packaging strategy:
 
 1. **This manifest packages a prebuilt Linux bundle.** We build with Flutter
    outside `flatpak-builder`, then copy the bundle into `/app`. This is suitable
    for a standalone `.flatpak` release. Flathub requires a separate source-build
    manifest for this open-source app.
-2. **No `libmpv` module needed.** Because media_kit bundles its own libmpv,
-   we don't pull mpv as a build dependency. The wrapper script just adds
-   `/app/lib/reinplayer/lib` to `LD_LIBRARY_PATH` so the loader finds it.
+2. **Bundle missing native libraries.** `dist/build.sh flatpak` inspects the
+   packaged executable and plugins inside the Flatpak build sandbox. It copies
+   `libmpv.so.2` and any other libraries missing from the runtime from the
+   Linux build host into the app's `lib/` directory, then repeats the check.
+   The launcher adds that directory to `LD_LIBRARY_PATH`.
 
-The runtime is `org.freedesktop.Platform//26.08` rather than
-`org.gnome.Platform`. Rein Player only needs GTK3 / Mesa / glibc — pulling in
-the full GNOME platform would balloon the image for no gain.
+The runtime is `org.freedesktop.Platform//26.08`. Native media libraries that
+it does not provide are included in the application bundle.
 
 ---
 
@@ -106,9 +107,9 @@ must also have a reachable HTTPS URL related to the project.
 ## 4. Prerequisites (Linux host)
 
 ```bash
-# Debian / Ubuntu
+# Debian / Ubuntu (also install the Flutter Linux build dependencies)
 sudo apt update
-sudo apt install flatpak flatpak-builder
+sudo apt install flatpak flatpak-builder libgtk-3-dev libmpv-dev mpv
 
 # Fedora
 sudo dnf install flatpak flatpak-builder
@@ -129,6 +130,8 @@ flatpak remote-add --if-not-exists --user flathub \
 ```
 
 You also need Flutter installed and able to run `flutter build linux --release`.
+The build host must have `libmpv.so.2` and the other native libraries used by
+the Flutter bundle. The CI build uses Ubuntu 24.04.
 
 ---
 
@@ -152,49 +155,23 @@ flutter build linux --release
 3. Check that the latest AppStream release matches the `pubspec.yaml` version.
 4. Stage the manifest, desktop, metainfo, license, wrapper, icon, and Flutter bundle
    under `build/flatpak/`.
-5. Run `flatpak-builder --repo=build/flatpak-repo build-dir manifest.yml`.
+5. Build with `flatpak-builder`, inspect library dependencies inside the
+   build sandbox, and rebuild with any missing host libraries included.
 6. Export a portable bundle to `build/ReinPlayer-<version>-x86_64.flatpak`.
 
 ---
 
-## 6. Building manually (so you understand what the script does)
+## 6. Installing and testing a local build
 
 ```bash
-# Stage payload directory (manual equivalent of build.sh's flatpak target)
-mkdir -p build/flatpak/payload/bundle
-cp dist/flatpak/com.reinplayer.ReinPlayer.yml          build/flatpak/
-cp dist/flatpak/com.reinplayer.ReinPlayer.desktop      build/flatpak/payload/
-cp dist/flatpak/com.reinplayer.ReinPlayer.metainfo.xml build/flatpak/payload/
-cp dist/flatpak/reinplayer.sh                       build/flatpak/payload/
-cp LICENSE                                          build/flatpak/payload/
-for s in 64 128 256 512; do
-  mkdir -p "build/flatpak/payload/icons/${s}x${s}"
-  cp "macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_${s}.png" \
-     "build/flatpak/payload/icons/${s}x${s}/icon.png"
-done
-cp -r build/linux/x64/release/bundle/.              build/flatpak/payload/bundle/
-
-# Build into a local OSTree repo
-cd build/flatpak
-flatpak-builder --user --force-clean \
-    --repo=../flatpak-repo \
-    build-dir \
-    com.reinplayer.ReinPlayer.yml
-
-# Install into your user session for testing.
-# (Pass an absolute path — some older flatpak versions reject relative ones.)
+# Build first with `./dist/build.sh flatpak` from the repository root.
+# Install from the local repo for testing.
 flatpak --user remote-add --no-gpg-verify --if-not-exists \
-    reinplayer-local "$(realpath ../flatpak-repo)"
+    reinplayer-local "$(realpath build/flatpak-repo)"
 flatpak --user install -y reinplayer-local com.reinplayer.ReinPlayer
 
-# Run it
+# Check that the launcher starts, then open a video and verify playback.
 flatpak run com.reinplayer.ReinPlayer
-
-# Or export a single-file bundle to hand to a user
-flatpak build-bundle ../flatpak-repo \
-    ../ReinPlayer-1.1.0-x86_64.flatpak \
-    com.reinplayer.ReinPlayer \
-    --runtime-repo=https://dl.flathub.org/repo/flathub.flatpakrepo
 ```
 
 To install a `.flatpak` bundle on a fresh machine:
@@ -351,7 +328,7 @@ A skeleton `flathub.json` for the current x86_64-only build:
 | `appstream-glib: failed to validate` during build | metainfo error | run `appstreamcli validate --pedantic dist/flatpak/com.reinplayer.ReinPlayer.metainfo.xml` and fix what it reports |
 | `Permission denied` opening any file | over-tight sandbox | use the file chooser portal, or temporarily add `--filesystem=host` and re-test |
 | App launches then crashes immediately | wrapper `LD_LIBRARY_PATH` wrong | `flatpak run --command=sh com.reinplayer.ReinPlayer` then `ldd /app/lib/reinplayer/rein_player` |
-| `Could not load shared library libmpv.so.2` | media_kit's libmpv wasn't copied | verify `build/linux/x64/release/bundle/lib/` is non-empty before running `build.sh flatpak` |
+| `Could not load shared library libmpv.so.2` | the host libmpv was not packaged | verify `build/flatpak/payload/bundle/lib/libmpv.so.2` exists after running `build.sh flatpak` |
 
 Useful debug commands:
 
@@ -373,8 +350,9 @@ journalctl --user -f -t flatpak-session-helper
 `.github/workflows/ci-fast.yaml` includes a `build-linux-flatpak` job on PRs
 to `dev`, tag pushes, and manual workflow runs. It builds the Flutter Linux bundle on
 `ubuntu-24.04`, validates the desktop and AppStream files, then runs
-`./dist/build.sh flatpak` and runs a headless launcher smoke test. The
-resulting `.flatpak` is uploaded as a workflow artifact and attached to tagged
+`./dist/build.sh flatpak`, installs the bundle, and checks its shared libraries
+against the installed runtime. The resulting `.flatpak` is uploaded
+as a workflow artifact and attached to tagged
 GitHub releases.
 
 This CI job builds the standalone bundle described above. It does not submit

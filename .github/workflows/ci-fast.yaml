@@ -136,11 +136,22 @@ jobs:
       - name: Build Flatpak bundle
         run: ./dist/build.sh flatpak
 
-      - name: Smoke test Flatpak launcher
+      - name: Check installed Flatpak dependencies
         run: |
-          flatpak-builder --run build/flatpak/build-dir \
-            dist/flatpak/com.reinplayer.ReinPlayer.yml \
-            reinplayer --version
+          flatpak install --user --noninteractive -y \
+            build/ReinPlayer-*-x86_64.flatpak
+          if ! dependency_report="$(flatpak run --user --command=sh \
+            com.reinplayer.ReinPlayer -c '
+              export LD_LIBRARY_PATH="/app/lib/reinplayer/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+              LD_TRACE_LOADED_OBJECTS=1 /app/lib/reinplayer/rein_player
+            ' 2>&1)"; then
+            printf '%s\n' "$dependency_report"
+            exit 1
+          fi
+          printf '%s\n' "$dependency_report"
+          if printf '%s\n' "$dependency_report" | grep -E '=> not found|version .* not found'; then
+            exit 1
+          fi
 
       - name: Upload Flatpak artifact
         uses: actions/upload-artifact@v4

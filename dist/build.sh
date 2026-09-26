@@ -161,15 +161,67 @@ function build_flatpak_package() {
         [[ -e "$library" ]] && strip "$library" || true
     done
 
-    # Build and export the Flatpak
+    # The Linux media_kit plugin links to the host's libmpv; it does not
+    # include libmpv in Flutter's bundle. Resolve missing libraries against
+    # the actual Flatpak runtime, copying only those absent from that runtime.
+    # Repeat because a copied library may itself need more libraries.
     rm -rf "${REPO_DIR}" "${PACKAGE_DIR}/.flatpak-builder" "${PACKAGE_DIR}/build-dir"
-    (
-        cd "${PACKAGE_DIR}"
-        flatpak-builder --user --force-clean \
-            --repo="${REPO_DIR}" \
-            build-dir \
-            com.reinplayer.ReinPlayer.yml
-    )
+    local dependency_report missing_libraries library host_path copied count
+    count=0
+    while true; do
+        (
+            cd "${PACKAGE_DIR}"
+            flatpak-builder --user --force-clean \
+                --repo="${REPO_DIR}" \
+                build-dir \
+                com.reinplayer.ReinPlayer.yml
+        )
+
+        if ! dependency_report="$(
+            cd "${PACKAGE_DIR}"
+            flatpak-builder --run build-dir com.reinplayer.ReinPlayer.yml \
+                /usr/bin/sh -c '
+                    export LD_LIBRARY_PATH="/app/lib/reinplayer/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+                    command -v ldd >/dev/null || exit 1
+                    for target in /app/lib/reinplayer/rein_player /app/lib/reinplayer/lib/*.so*; do
+                        [ -f "$target" ] || continue
+                        ldd "$target" || :
+                    done
+                ' 2>&1
+        )"; then
+            echo "Error: could not inspect Flatpak library dependencies:"
+            echo "${dependency_report}"
+            exit 1
+        fi
+
+        missing_libraries="$(printf '%s\n' "${dependency_report}" | \
+            awk '$2 == "=>" && $3 == "not" && $4 == "found" { print $1 }' | sort -u)"
+        if [[ -z "${missing_libraries}" ]]; then
+            break
+        fi
+
+        copied=0
+        while IFS= read -r library; do
+            [[ -n "${library}" ]] || continue
+            host_path="$(ldconfig -p | awk -v name="${library}" '$1 == name { print $NF; exit }')"
+            if [[ -z "${host_path}" || ! -f "${host_path}" ]]; then
+                echo "Error: ${library} is missing from both the Flatpak runtime and build host."
+                exit 1
+            fi
+            if [[ ! -e "${PAYLOAD_DIR}/bundle/lib/${library}" ]]; then
+                cp -L "${host_path}" "${PAYLOAD_DIR}/bundle/lib/${library}"
+                echo "Bundled ${library} from ${host_path}"
+                copied=$((copied + 1))
+            fi
+        done <<< "${missing_libraries}"
+
+        count=$((count + 1))
+        if [[ "${copied}" -eq 0 || "${count}" -ge 10 ]]; then
+            echo "Error: unresolved Flatpak library dependencies:"
+            echo "${missing_libraries}"
+            exit 1
+        fi
+    done
 
     BUNDLE_FILE="${BUNDLE_OUT}/ReinPlayer-${VERSION}-x86_64.flatpak"
     flatpak build-bundle "${REPO_DIR}" "${BUNDLE_FILE}" "${APP_ID}" \
