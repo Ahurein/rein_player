@@ -23,6 +23,10 @@ class RpKeysConstants {
   static const String subtitleOutlineColorKey = "subtitleOutlineColor";
   static const String subtitleOutlineWidthKey = "subtitleOutlineWidth";
   static const String subtitleTextAlignKey = "subtitleTextAlign";
+  static const String secondarySubtitleEnabledKey =
+      "isSecondarySubtitleEnabled";
+  static const String secondarySubtitleLanguageKey =
+      "secondarySubtitleLanguage";
 
   /// playlist
   static const String playlistTypeStorageKey = "playlistTypeStorageKey";

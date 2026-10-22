@@ -48,10 +48,16 @@ List<RpMenuItem> get defaultMenuData {
           text: LocaleKeys.menuAddSubtitle.tr,
           onTap: SubtitleController.to.loadSubtitle,
         ),
+        ..._buildPrimarySubtitleTrackItems(),
         RpMenuItem(
           icon: Icons.remove,
           text: LocaleKeys.menuDisableSubtitle.tr,
           onTap: SubtitleController.to.disableSubtitle,
+        ),
+        RpMenuItem(
+          icon: Icons.subtitles_outlined,
+          text: LocaleKeys.menuSecondarySubtitle.tr,
+          subMenuItems: _buildSecondarySubtitleMenu(),
         ),
         RpMenuItem(
           icon: Icons.settings,
@@ -507,6 +513,52 @@ List<RpMenuItem> _buildAudioTrackMenu(
   }
 
   return audioMenuItems;
+}
+
+List<RpMenuItem> _buildPrimarySubtitleTrackItems() {
+  final controller = SubtitleController.to;
+  final currentId = controller.currentPrimaryTrackId.value;
+
+  return [
+    for (final track in controller.availableSubtitleTracks)
+      RpMenuItem(
+        icon: currentId == track.id ? Icons.check : null,
+        text: controller.getSubtitleTrackDisplayName(track),
+        onTap: () async {
+          await controller.selectPrimaryTrack(track);
+        },
+      ),
+  ];
+}
+
+List<RpMenuItem> _buildSecondarySubtitleMenu() {
+  final controller = SubtitleController.to;
+  final currentId = controller.currentSecondaryTrackId.value;
+  final primaryId = controller.currentPrimaryTrackId.value;
+
+  return [
+    RpMenuItem(
+      icon: Icons.add,
+      text: LocaleKeys.menuAddSecondarySubtitle.tr,
+      onTap: controller.loadSecondarySubtitle,
+    ),
+    for (final track in controller.availableSubtitleTracks)
+      RpMenuItem(
+        icon: currentId == track.id ? Icons.check : null,
+        text: controller.getSubtitleTrackDisplayName(track),
+        // mpv cannot show one track in both places
+        enabled: track.id != primaryId,
+        onTap: () async {
+          await controller.selectSecondaryTrack(track);
+        },
+      ),
+    RpMenuItem(
+      icon: Icons.remove,
+      text: LocaleKeys.menuDisableSecondarySubtitle.tr,
+      enabled: currentId.isNotEmpty,
+      onTap: controller.disableSecondarySubtitle,
+    ),
+  ];
 }
 
 ContextMenu createContextMenu() {

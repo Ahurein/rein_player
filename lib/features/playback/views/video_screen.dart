@@ -11,8 +11,8 @@ import 'package:rein_player/features/player_frame/controller/navigation_context_
 import 'package:rein_player/features/player_frame/controller/window_actions_controller.dart';
 import 'package:rein_player/features/settings/controller/menu_controller.dart';
 import 'package:rein_player/features/settings/controller/settings_controller.dart';
-import 'package:rein_player/features/settings/controller/subtitle_styling_controller.dart';
 import 'package:rein_player/features/playback/views/playback_speed_overlay.dart';
+import 'package:rein_player/features/playback/views/subtitle_overlay.dart';
 import 'package:rein_player/features/playback/views/bookmark_overlay.dart';
 import 'package:rein_player/features/playback/views/ab_loop_overlay.dart';
 import 'package:rein_player/features/settings/views/menu/menu_items.dart';
@@ -66,26 +66,21 @@ class RpVideoScreen extends StatelessWidget {
                           return const RpNoMediaPlaceholder();
                         }
 
-                        // Get subtitle styling controller
-                        final subtitleController = SubtitleStylingController.to;
-
-                        return Obx(() => Video(
-                              key: ValueKey(
-                                  VideoAndControlController.to.currentVideoUrl),
-                              controller: videoController.videoPlayerController,
-                              controls: NoVideoControls,
-                              subtitleViewConfiguration:
-                                  SubtitleViewConfiguration(
-                                padding:
-                                    subtitleController.getSubtitlePadding(),
-                                style:
-                                    subtitleController.getSubtitleTextStyle(),
-                                textAlign:
-                                    subtitleController.settings.value.textAlign,
-                              ),
-                            ));
+                        // subtitles are drawn by RpSubtitleOverlay so that the
+                        // secondary track can be placed at the top
+                        return Video(
+                          key: ValueKey(
+                              VideoAndControlController.to.currentVideoUrl),
+                          controller: videoController.videoPlayerController,
+                          controls: NoVideoControls,
+                          subtitleViewConfiguration:
+                              const SubtitleViewConfiguration(visible: false),
+                        );
                       }),
                     ),
+
+                    /// primary (bottom) and secondary (top) subtitles
+                    const RpSubtitleOverlay(),
 
                     /// playback speed overlay
                     const PlaybackSpeedOverlay(),

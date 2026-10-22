@@ -4,6 +4,8 @@ import 'package:rein_player/utils/localization/app_languages.dart';
 
 class Settings {
   bool isSubtitleEnabled;
+  bool isSecondarySubtitleEnabled;
+  String secondarySubtitleLanguage;
   PlaylistType playlistType;
   DoubleClickAction doubleClickAction;
   PlaylistLoadBehavior playlistLoadBehavior;
@@ -12,6 +14,8 @@ class Settings {
 
   Settings({
     this.isSubtitleEnabled = true,
+    this.isSecondarySubtitleEnabled = false,
+    this.secondarySubtitleLanguage = "",
     this.playlistType = PlaylistType.defaultPlaylistType,
     this.doubleClickAction = DoubleClickAction.toggleWindowSize,
     this.playlistLoadBehavior = PlaylistLoadBehavior.clearAndReplace,
@@ -39,6 +43,10 @@ class Settings {
     return Settings(
       isSubtitleEnabled:
           json[RpKeysConstants.subtitleEnabledStorageKey] as bool? ?? false,
+      isSecondarySubtitleEnabled:
+          json[RpKeysConstants.secondarySubtitleEnabledKey] as bool? ?? false,
+      secondarySubtitleLanguage:
+          json[RpKeysConstants.secondarySubtitleLanguageKey] as String? ?? "",
       playlistType: savedPlaylistType,
       doubleClickAction: savedDoubleClickAction,
       playlistLoadBehavior: savedPlaylistLoadBehavior,
@@ -50,6 +58,8 @@ class Settings {
   Map<String, dynamic> toJson() {
     return {
       RpKeysConstants.subtitleEnabledStorageKey: isSubtitleEnabled,
+      RpKeysConstants.secondarySubtitleEnabledKey: isSecondarySubtitleEnabled,
+      RpKeysConstants.secondarySubtitleLanguageKey: secondarySubtitleLanguage,
       RpKeysConstants.playlistTypeStorageKey: playlistType.name,
       RpKeysConstants.doubleClickActionKey: doubleClickAction.name,
       RpKeysConstants.playlistLoadBehaviorKey: playlistLoadBehavior.name,

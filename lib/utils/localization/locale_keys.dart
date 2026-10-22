@@ -22,6 +22,9 @@ class LocaleKeys {
   static const menuAddSubtitle = 'menu.addSubtitle';
   static const menuDisableSubtitle = 'menu.disableSubtitle';
   static const menuSubtitleSettings = 'menu.subtitleSettings';
+  static const menuSecondarySubtitle = 'menu.secondarySubtitle';
+  static const menuAddSecondarySubtitle = 'menu.addSecondarySubtitle';
+  static const menuDisableSecondarySubtitle = 'menu.disableSecondarySubtitle';
   static const menuAudio = 'menu.audio';
   static const menuPreferences = 'menu.preferences';
   static const menuKeyboardBindings = 'menu.keyboardBindings';
@@ -127,6 +130,10 @@ class LocaleKeys {
   static const snackSubtitleLoaded = 'snack.subtitleLoaded';
   static const snackSubtitleLoadedMsg = 'snack.subtitleLoadedMsg';
   static const snackSubtitleFormatError = 'snack.subtitleFormatError';
+  static const snackSecondarySubtitleLoaded = 'snack.secondarySubtitleLoaded';
+  static const snackSecondarySubtitleLoadedMsg =
+      'snack.secondarySubtitleLoadedMsg';
+  static const snackSecondarySubtitleError = 'snack.secondarySubtitleError';
   static const snackFillAllFields = 'snack.fillAllFields';
   static const snackAlreadyAdded = 'snack.alreadyAdded';
   static const snackAlreadyAddedMsg = 'snack.alreadyAddedMsg';

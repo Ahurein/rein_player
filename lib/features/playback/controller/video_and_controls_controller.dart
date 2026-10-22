@@ -142,6 +142,7 @@ class VideoAndControlController extends GetxController {
 
     /// Add media streams to gather info
     addMediaStreamsForInfo();
+    await SubtitleController.to.resetTracksForNewMedia();
     await videoPlayerController.player.open(Media(media.location));
     await VolumeController.to.ensureVolume();
 
